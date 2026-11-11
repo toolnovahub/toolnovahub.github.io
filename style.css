@@ -15,3 +15,34 @@
 .tool-form .options label:has(input[type=number]){display:grid;flex:1 1 160px}
 @media(max-width:520px){.tool-filters{align-items:stretch}.tool-search{max-width:none;flex-basis:100%}.filter-tabs{width:100%;overflow-x:auto;flex-wrap:nowrap;padding-bottom:6px}.filter-tab{white-space:nowrap}.hero{padding-bottom:70px}}
 @media(prefers-reduced-motion:reduce){:root{scroll-behavior:auto}.tool-card{transition:none}}
+
+
+/* v1.3: lightweight visual refresh — no images, fonts or third-party scripts */
+:root{color-scheme:dark;--accent:#a78bfa;--border:#34415f;--surface:#121b2e}
+body{min-height:100vh;-webkit-font-smoothing:antialiased}
+.topbar{position:relative;z-index:2}
+.brand{display:inline-flex;align-items:center;white-space:nowrap}
+.brandmark{display:inline-grid;place-items:center;width:37px;height:37px;margin-right:11px;border:1px solid #6b56a7;border-radius:11px;background:linear-gradient(145deg,#30225b,#192a4b);box-shadow:0 7px 22px #8b5cf622}
+.hero{position:relative;isolation:isolate}
+.hero::before{content:"";position:absolute;z-index:-1;inset:18px 12% auto;height:340px;border-radius:50%;background:radial-gradient(ellipse,#6d4bd02b 0%,transparent 70%);pointer-events:none}
+.hero h1{font-weight:850;text-wrap:balance}
+.hero p{text-wrap:pretty}
+.primary,.action{box-shadow:0 8px 28px #7654d52b;transition:background .16s,transform .16s}
+.primary:hover,.action:hover{transform:translateY(-2px)}
+.tool-card{position:relative;box-shadow:0 6px 24px #00000016;transition:transform .18s,border-color .18s,box-shadow .18s}
+.tool-card:hover{box-shadow:0 18px 40px #00000030}
+.tool-card:active{transform:translateY(-1px)}
+.tool-search{transition:border-color .16s,box-shadow .16s}
+.tool-search:focus{box-shadow:0 0 0 4px #a78bfa22}
+.tool-form{box-shadow:0 18px 60px #00000025}
+.tool-form input,.tool-form select,.tool-form textarea{max-width:100%}
+.tool-form :is(input,select,textarea):focus-visible{outline:2px solid #a78bfa;outline-offset:2px}
+.tool-form button{min-height:44px}
+#workspace{scroll-margin-top:18px}
+#tools{scroll-margin-top:24px}
+.skip-link{position:absolute;top:-100px;left:16px;z-index:10;background:#fff;color:#151525;padding:12px 18px;border-radius:10px;font-weight:750}
+.skip-link:focus{top:12px}
+footer{line-height:1.7}
+@media(max-width:760px){.hero::before{inset:25px 0 auto;height:260px}.tool-card{min-height:205px}}
+@media(max-width:520px){.brand{font-size:20px}.brandmark{width:31px;height:31px}.tool-card{min-height:185px;padding:21px}.tool-card strong{font-size:18px}.topbar nav{gap:10px}.topbar nav a{white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.primary,.action,.tool-card,.tool-search{transition:none}.primary:hover,.action:hover,.tool-card:hover{transform:none}}
