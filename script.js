@@ -37,7 +37,19 @@ function images(compress){
  };
 }
 function passwords(){area.innerHTML='<div class="tool-form"><label>Length: <span id="len">20</span><input type="range" id="length" min="8" max="64" value="20"></label><div class="options"><label><input type="checkbox" id="upper" checked> Uppercase</label><label><input type="checkbox" id="lower" checked> Lowercase</label><label><input type="checkbox" id="digits" checked> Numbers</label><label><input type="checkbox" id="symbols" checked> Symbols</label></div><div class="output" id="result"></div><div class="actions"><button class="action" id="generate">Generate</button><button class="secondary" id="copy">Copy</button></div></div>';$('#length').oninput=()=>$('#len').textContent=$('#length').value;function rand(n){const a=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%n}function generate(){const sets=[['upper','ABCDEFGHIJKLMNOPQRSTUVWXYZ'],['lower','abcdefghijklmnopqrstuvwxyz'],['digits','0123456789'],['symbols','!@#$%^&*()-_=+?']].filter(v=>$('#'+v[0]).checked).map(v=>v[1]);if(!sets.length)return note('Select a character set.',true);const chars=sets.map(s=>s[rand(s.length)]),pool=sets.join('');while(chars.length<Number($('#length').value))chars.push(pool[rand(pool.length)]);for(let i=chars.length-1;i>0;i--){const j=rand(i+1);[chars[i],chars[j]]=[chars[j],chars[i]]}$('#result').textContent=chars.join('');note('Secure password generated.')}$('#generate').onclick=generate;$('#copy').onclick=()=>copy($('#result').textContent);generate()}
-function words(){area.innerHTML='<div class="tool-form"><label>Enter text<textarea id="text" placeholder="Start typing..."></textarea></label><div class="stats"><div class="stat"><strong id="wc">0</strong><small>Words</small></div><div class="stat"><strong id="cc">0</strong><small>Characters</small></div><div class="stat"><strong id="lc">0</strong><small>Lines</small></div></div><button class="secondary" id="clear">Clear</button></div>';function update(){const v=$('#text').value;$('#wc').textContent=v.trim()?v.trim().split(/\s+/u).length:0;$('#cc').textContent=Array.from(v).length;$('#lc').textContent=v?v.split(/\r\n|\n|\r/).length:0}$('#text').oninput=update;$('#clear').onclick=()=>{$('#text').value='';update()}}
+function words(){
+ area.innerHTML='<div class="tool-form"><label>Enter text<textarea id="text" placeholder="Start typing..."></textarea></label><div class="stats"><div class="stat"><strong id="wc">0</strong><small>Words</small></div><div class="stat"><strong id="cc">0</strong><small>Characters</small></div><div class="stat"><strong id="lc">0</strong><small>Lines</small></div></div><button class="secondary" id="clear">Clear</button><small>Maximum text length: 1 million characters.</small></div>';
+ const field=$('#text'),MAX=1000000;
+ function update(){
+  const v=field.value;
+  if(v.length>MAX){$('#wc').textContent='—';$('#cc').textContent='—';$('#lc').textContent='—';return note('Text is too large. Maximum is 1 million characters.',true)}
+  let words=0,inside=false,lines=v?1:0,chars=0;
+  for(const ch of v){chars++;if(ch==='\n')lines++;if(/\s/u.test(ch)){inside=false}else if(!inside){inside=true;words++}}
+  $('#wc').textContent=words;$('#cc').textContent=chars;$('#lc').textContent=lines;
+  if(status.className==='error')note('');
+ }
+ field.oninput=update;$('#clear').onclick=()=>{field.value='';update();note('')};
+}
 function json(){
  area.innerHTML='<div class="tool-form"><label>JSON<textarea id="json" spellcheck="false" placeholder="{&quot;hello&quot;:&quot;world&quot;}"></textarea></label><div class="actions"><button class="action" id="format">Format</button><button class="secondary" id="minify">Minify</button><button class="secondary" id="copy">Copy</button></div><small>Maximum input: 2 million characters. Processing stays in your browser.</small></div>';
  const field=$('#json'),MAX_INPUT=2000000,MAX_OUTPUT=5000000;
@@ -106,9 +118,21 @@ function resize(){
   finally{if(bitmap)bitmap.close();processing=false;run.disabled=false}
  };
 }
-function caseConverter(){area.innerHTML='<div class="tool-form"><label>Your text<textarea id="case-text" placeholder="Paste or type text here..."></textarea></label><div class="actions"><button class="action" data-case="upper">UPPERCASE</button><button class="secondary" data-case="lower">lowercase</button><button class="secondary" data-case="title">Title Case</button><button class="secondary" data-case="sentence">Sentence case</button><button class="secondary" id="case-copy">Copy</button></div></div>';const field=$('#case-text');area.querySelectorAll('[data-case]').forEach(btn=>btn.onclick=()=>{const mode=btn.dataset.case;let t=field.value;if(mode==='upper')t=t.toUpperCase();if(mode==='lower')t=t.toLowerCase();if(mode==='title')t=t.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(mode==='sentence')t=t.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());field.value=t;note('Text converted.')});$('#case-copy').onclick=()=>copy(field.value)}
-
-
+function caseConverter(){
+ area.innerHTML='<div class="tool-form"><label>Your text<textarea id="case-text" placeholder="Paste or type text here..."></textarea></label><div class="actions"><button class="action" data-case="upper">UPPERCASE</button><button class="secondary" data-case="lower">lowercase</button><button class="secondary" data-case="title">Title Case</button><button class="secondary" data-case="sentence">Sentence case</button><button class="secondary" id="case-copy">Copy</button></div><small>Maximum text length: 1 million characters.</small></div>';
+ const field=$('#case-text'),MAX=1000000;
+ area.querySelectorAll('[data-case]').forEach(btn=>btn.onclick=()=>{
+  if(field.value.length>MAX)return note('Text is too large. Maximum is 1 million characters.',true);
+  const mode=btn.dataset.case;let t=field.value;
+  if(mode==='upper')t=t.toUpperCase();
+  if(mode==='lower')t=t.toLowerCase();
+  if(mode==='title')t=t.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());
+  if(mode==='sentence')t=t.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());
+  if(t.length>MAX)return note('Converted text exceeds the 1 million character limit.',true);
+  field.value=t;note('Text converted.');
+ });
+ $('#case-copy').onclick=()=>field.value.length>MAX?note('Text is too large to copy.',true):copy(field.value);
+}
 function base64Tool(){
  area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. Decode uses the last encoded result when the input has not changed. Everything stays on your device.</small></div>';
  const input=$('#b64-input'),output=$('#b64-output'),MAX_INPUT=1000000,MAX_OUTPUT=2000000;
@@ -146,14 +170,33 @@ function uuidTool(){area.innerHTML='<div class="tool-form"><label>How many UUIDs
 
 function imageBase64Tool(){
  area.innerHTML='<div class="tool-form"><label>Choose an image<input id="img64-file" type="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/avif"></label><div class="actions"><button class="action" id="img64-convert">Convert to Base64</button><button class="secondary" id="img64-copy">Copy data URL</button><button class="secondary" id="img64-download">Download .txt</button></div><label>Base64 data URL<textarea id="img64-output" readonly spellcheck="false" placeholder="Your encoded image will appear here..."></textarea></label><small>Maximum file size: 5 MB. Your image stays in your browser. The output may be much larger than the original file.</small></div>';
- const input=$('#img64-file'),output=$('#img64-output');let fileName='image';
- input.onchange=()=>{output.value='';note('')};
- $('#img64-convert').onclick=()=>{const file=input.files[0];if(!file)return note('Choose an image first.',true);if(!file.type.startsWith('image/'))return note('Please choose an image file.',true);if(file.size>5*1024*1024)return note('Maximum file size is 5 MB.',true);const reader=new FileReader();reader.onload=()=>{if(input.files[0]!==file)return;output.value=String(reader.result);fileName=file.name.replace(/\.[^.]+$/,'');note('Image converted to Base64 ('+Math.round(output.value.length/1024)+' KB of text).')};reader.onerror=()=>note('Could not read this image.',true);reader.readAsDataURL(file)};
+ const input=$('#img64-file'),output=$('#img64-output'),button=$('#img64-convert');
+ let fileName='image',reader=null,revision=0;
+ input.onchange=()=>{
+  revision++;if(reader&&reader.readyState===FileReader.LOADING)reader.abort();
+  reader=null;output.value='';fileName='image';note('');
+ };
+ button.onclick=()=>{
+  const file=input.files[0];
+  if(!file)return note('Choose an image first.',true);
+  if(!['image/png','image/jpeg','image/webp','image/gif','image/bmp','image/avif'].includes(file.type))return note('Please choose a supported image file.',true);
+  if(file.size>5*1024*1024)return note('Maximum file size is 5 MB.',true);
+  if(reader&&reader.readyState===FileReader.LOADING)return note('Conversion already in progress.');
+  const current=revision;reader=new FileReader();const active=reader;
+  button.disabled=true;
+  active.onload=()=>{
+   if(current!==revision||input.files[0]!==file)return;
+   output.value=String(active.result);fileName=file.name.replace(/\.[^.]+$/,'');
+   note('Image converted to Base64 ('+Math.round(output.value.length/1024)+' KB of text).');
+  };
+  active.onerror=()=>{if(current===revision)note('Could not read this image.',true)};
+  active.onabort=()=>{if(current===revision)note('Conversion cancelled.',true)};
+  active.onloadend=()=>{if(reader===active)reader=null;button.disabled=false};
+  active.readAsDataURL(file);
+ };
  $('#img64-copy').onclick=()=>output.value?copy(output.value):note('Convert an image first.',true);
  $('#img64-download').onclick=()=>output.value?save(new Blob([output.value],{type:'text/plain;charset=utf-8'}),fileName+'-base64.txt'):note('Convert an image first.',true);
 }
-
-
 function qrTool(){
  area.innerHTML='<div class="tool-form"><label>Link or text<textarea id="qr-input" placeholder="https://example.com" maxlength="1500"></textarea></label><label>Image size<select id="qr-size"><option value="256">256 × 256</option><option value="512" selected>512 × 512</option><option value="1024">1024 × 1024</option></select></label><div class="actions"><button class="action" id="qr-generate">Generate QR code</button><button class="secondary" id="qr-download" disabled>Download PNG</button></div><div id="qr-preview" style="display:none;max-width:100%;width:max-content;padding:16px;border-radius:12px;background:white"></div><small>QR codes are generated entirely on your device. No data is sent to a QR service. Use a camera app to test your code before sharing.</small></div>';
  const input=$('#qr-input'),preview=$('#qr-preview'),download=$('#qr-download');let png=null;
@@ -167,15 +210,30 @@ function qrTool(){
 
 
 function urlTool(){
- area.innerHTML='<div class="tool-form"><label>Input text<textarea id="url-input" placeholder="Paste text or an encoded URL component..."></textarea></label><div class="actions"><button class="action" id="url-encode">Encode</button><button class="secondary" id="url-decode">Decode</button><button class="secondary" id="url-use">Use result as input</button><button class="secondary" id="url-copy">Copy result</button></div><label>Result<textarea id="url-output" readonly spellcheck="false"></textarea></label><small>Uses standard URL component encoding. For complete URLs, encode only the parameter values rather than the entire address. Processing stays in your browser.</small></div>';
- const input=$('#url-input'),output=$('#url-output');let lastInput=null,lastEncoded=null;
+ area.innerHTML='<div class="tool-form"><label>Input text<textarea id="url-input" placeholder="Paste text or an encoded URL component..."></textarea></label><div class="actions"><button class="action" id="url-encode">Encode</button><button class="secondary" id="url-decode">Decode</button><button class="secondary" id="url-use">Use result as input</button><button class="secondary" id="url-copy">Copy result</button></div><label>Result<textarea id="url-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. For complete URLs, encode only parameter values. Processing stays in your browser.</small></div>';
+ const input=$('#url-input'),output=$('#url-output'),MAX_INPUT=1000000,MAX_OUTPUT=3000000;
+ let lastInput=null,lastEncoded=null;
  input.addEventListener('input',()=>{lastInput=null;lastEncoded=null});
- $('#url-encode').onclick=()=>{try{output.value=encodeURIComponent(input.value);lastInput=input.value;lastEncoded=output.value;note('Text encoded. Click Decode to reverse it.')}catch{note('Could not encode this text.',true)}};
- $('#url-decode').onclick=()=>{const value=lastInput!==null&&input.value===lastInput&&output.value===lastEncoded?lastEncoded:input.value;try{output.value=decodeURIComponent(value);lastInput=null;lastEncoded=null;note('URL text decoded.')}catch{note('Invalid percent-encoding or UTF-8 sequence.',true)}};
- $('#url-use').onclick=()=>{input.value=output.value;lastInput=null;lastEncoded=null;note('Result moved to input.')};
+ $('#url-encode').onclick=()=>{
+  if(input.value.length>MAX_INPUT)return note('Input exceeds the 1 million character limit.',true);
+  try{
+   const result=encodeURIComponent(input.value);
+   if(result.length>MAX_OUTPUT)return note('Encoded result exceeds the 3 million character limit.',true);
+   output.value=result;lastInput=input.value;lastEncoded=result;note('Text encoded. Click Decode to reverse it.');
+  }catch{note('Could not encode this text.',true)}
+ };
+ $('#url-decode').onclick=()=>{
+  const value=lastInput!==null&&input.value===lastInput&&output.value===lastEncoded?lastEncoded:input.value;
+  if(value.length>MAX_OUTPUT)return note('Encoded input exceeds the 3 million character limit.',true);
+  try{
+   const result=decodeURIComponent(value);
+   if(result.length>MAX_INPUT)return note('Decoded result exceeds the 1 million character limit.',true);
+   output.value=result;lastInput=null;lastEncoded=null;note('URL text decoded.');
+  }catch{note('Invalid percent-encoding or UTF-8 sequence.',true)}
+ };
+ $('#url-use').onclick=()=>{if(output.value.length>MAX_OUTPUT)return note('Result is too large.',true);input.value=output.value;lastInput=null;lastEncoded=null;note('Result moved to input.')};
  $('#url-copy').onclick=()=>output.value?copy(output.value):note('Generate a result first.',true);
 }
-
 function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool,url:urlTool})[k]();if(!document.body.dataset.toolPage)panel.scrollIntoView({behavior:'smooth'})}
 const toolPages={"compress":"/tools/image-compressor/","convert":"/tools/image-converter/","password":"/tools/password-generator/","words":"/tools/word-counter/","json":"/tools/json-formatter/","colors":"/tools/color-converter/","resize":"/tools/image-resizer/","case":"/tools/text-case-converter/","base64":"/tools/base64-encoder-decoder/","uuid":"/tools/uuid-generator/","imagebase64":"/tools/image-to-base64/","qr":"/tools/qr-code-generator/","url":"/tools/url-encoder-decoder/"};
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{const destination=toolPages[b.dataset.tool];if(destination){location.assign(destination)}else{open(b.dataset.tool)}});if($('#back'))$('#back').onclick=()=>{if(document.body.dataset.toolPage){location.href='/#tools';return}panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
