@@ -54,25 +54,33 @@ function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$(
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));$('#back').onclick=()=>{panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
 
 function setupToolDiscovery(){
- const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count');
- if(!search||!tabs.length||!empty||!count)return;
- let category='all';
+ const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count'),more=$('#show-all-tools'),categories=[...document.querySelectorAll('[data-category-jump]')];
+ if(!search||!tabs.length||!empty||!count||!more)return;
+ let category='all',expanded=false;
+ const featured=new Set(['compress','convert','password','qr','words','json']);
  function filter(){
-  const query=search.value.trim().toLocaleLowerCase();
-  let visible=0;
+  const query=search.value.trim().toLocaleLowerCase(),showEverything=expanded||category!=='all'||query.length>0;
+  let visible=0,matched=0;
   for(const card of cards){
    const match=(category==='all'||card.dataset.category===category)&&card.textContent.toLocaleLowerCase().includes(query);
-   card.hidden=!match;if(match)visible++;
+   if(match)matched++;
+   const show=match&&(showEverything||featured.has(card.dataset.tool));
+   card.hidden=!show;if(show)visible++;
   }
-  count.textContent=visible+' of '+cards.length+' tools';
-  empty.hidden=visible!==0;
+  count.textContent=showEverything?visible+' of '+cards.length+' tools':visible+' featured tools · '+cards.length+' total';
+  empty.hidden=matched!==0;
+  more.hidden=category!=='all'||query.length>0;
+  more.textContent=expanded?'Show fewer tools':'View all '+cards.length+' tools';
+  more.setAttribute('aria-expanded',String(expanded));
+ }
+ function setCategory(value){
+  category=value;tabs.forEach(t=>t.setAttribute('aria-pressed',String(t.dataset.filter===value)));
+  filter();
  }
  search.addEventListener('input',filter);
- tabs.forEach(tab=>tab.addEventListener('click',()=>{
-  category=tab.dataset.filter;
-  tabs.forEach(t=>t.setAttribute('aria-pressed',String(t===tab)));
-  filter();
- }));
+ tabs.forEach(tab=>tab.addEventListener('click',()=>setCategory(tab.dataset.filter)));
+ categories.forEach(tile=>tile.addEventListener('click',()=>{search.value='';setCategory(tile.dataset.categoryJump);$('#tools').scrollIntoView({behavior:'smooth'});search.focus({preventScroll:true})}));
+ more.addEventListener('click',()=>{expanded=!expanded;filter()});
  filter();
 }
 setupToolDiscovery();
