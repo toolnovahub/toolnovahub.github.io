@@ -1,0 +1,5 @@
+pdf-lib 1.17.1 (MIT): https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js
+PDF.js 3.11.174 (Apache-2.0): https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js
+PDF.js worker 3.11.174 (Apache-2.0): https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js
+JSZip 3.10.1 (MIT/GPL-3.0 dual): https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js
+SHA512SUMS: exact digests verified against the reviewed GitHub Actions artifact.
