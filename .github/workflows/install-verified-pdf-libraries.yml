@@ -1,0 +1,47 @@
+name: Install verified PDF libraries
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Download and verify exact reviewed library bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p libs/pdf
+          curl --fail --location --retry 3 --max-time 90 --proto '=https' --tlsv1.2 'https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js' -o 'libs/pdf/pdf-lib.min.js'
+          echo 'cfc2182c73bc6d3805aa3fb2acfc88267cc10dfec30e15b0884b24e2c63e39ee89d8cf9641eaae7864bbaa2a08e6f4faad781545be0ad545500b9111ecc2b329  libs/pdf/pdf-lib.min.js' | sha512sum --check --status
+          curl --fail --location --retry 3 --max-time 90 --proto '=https' --tlsv1.2 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js' -o 'libs/pdf/pdf.min.js'
+          echo 'abee25885c1d3c2fdb35d854a59c7a6970f1fe1efbc8442d9f8235b251f275c6d92b7e272da477700798489b21a3120eab79a311fef1244f18588507327fa809  libs/pdf/pdf.min.js' | sha512sum --check --status
+          curl --fail --location --retry 3 --max-time 90 --proto '=https' --tlsv1.2 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js' -o 'libs/pdf/pdf.worker.min.js'
+          echo '05bad9efa50d66ae41847ecb2fba67f40e13290a5078d0873a8eb9fda91f7a570805b715bd858e15028f5c8af2904dea6716239835f9ef7a1ae18c2c73bae94f  libs/pdf/pdf.worker.min.js' | sha512sum --check --status
+          curl --fail --location --retry 3 --max-time 90 --proto '=https' --tlsv1.2 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js' -o 'libs/pdf/jszip.min.js'
+          echo '5cc55ddbc175a07fceef57f3c019d5ec7b9c2f1570b717f6e9757c3f8c0f936e840f1b8667dd4df1bb0eb6d9a7a267020f7092e593112f9d07d0680e1ef7a0b6  libs/pdf/jszip.min.js' | sha512sum --check --status
+          sha512sum libs/pdf/*.js > libs/pdf/SHA512SUMS
+          cat > libs/pdf/SOURCES.txt <<'EOF'
+          pdf-lib 1.17.1 (MIT): https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js
+          PDF.js 3.11.174 (Apache-2.0): https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js
+          PDF.js worker 3.11.174 (Apache-2.0): https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js
+          JSZip 3.10.1 (MIT/GPL-3.0 dual): https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js
+          SHA512SUMS: exact digests verified against the reviewed GitHub Actions artifact.
+          EOF
+      - name: Commit verified files only
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add libs/pdf/pdf-lib.min.js libs/pdf/pdf.min.js libs/pdf/pdf.worker.min.js libs/pdf/jszip.min.js libs/pdf/SHA512SUMS libs/pdf/SOURCES.txt
+          if git diff --cached --quiet; then echo 'Already installed'; exit 0; fi
+          git commit -m 'Vendor verified PDF dependencies with SHA-512 checksums'
+          git push
