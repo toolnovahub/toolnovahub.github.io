@@ -103,3 +103,31 @@ footer{line-height:1.7}
 .related-arrow{position:absolute;right:19px;top:19px;color:#bca8ff}
 @media(max-width:700px){.related-grid{grid-template-columns:1fr}.tool-page{padding:20px 16px 55px}.tool-page .workspace{padding:15px}.tool-page .tool-form{padding:18px}.breadcrumbs{margin-bottom:28px}.related-card{min-height:125px}.related-head{align-items:flex-start}}
 @media(prefers-reduced-motion:reduce){.related-card{transition:none}.related-card:hover{transform:none}}
+
+/* Homepage refresh v2.4 — scoped so tool detail pages stay unchanged */
+body:not([data-tool-page]) .hero{padding-top:82px;padding-bottom:58px}
+body:not([data-tool-page]) .hero h1{max-width:900px;margin:20px auto 24px;letter-spacing:-3.5px}
+body:not([data-tool-page]) .hero p{max-width:680px}
+.hero-actions{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap}
+.hero-secondary{display:inline-flex;align-items:center;gap:10px;padding:14px 22px;border:1px solid #465176;border-radius:12px;color:#d6def3;font-weight:700;background:#151e34}
+.hero-secondary:hover{border-color:#a78bfa;background:#222847}
+body:not([data-tool-page]) .trust{margin-top:25px;gap:12px 24px}
+.popular-tools{max-width:1150px;margin:0 auto;padding:0 24px 45px;scroll-margin-top:20px}
+.popular-heading{display:flex;align-items:end;justify-content:space-between;gap:16px;margin-bottom:17px}
+.popular-heading h2{font-size:27px;letter-spacing:-.7px;margin:8px 0 0}
+.popular-heading>a{color:#c4b3ff;font-size:14px;font-weight:700}
+.popular-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.popular-grid>a{display:flex;align-items:center;gap:14px;min-width:0;padding:18px;border:1px solid #394462;border-radius:16px;background:linear-gradient(140deg,#1b2540,#121b30);transition:border-color .16s,transform .16s}
+.popular-grid>a:hover{border-color:#a78bfa;transform:translateY(-2px)}
+.popular-grid>a>span:nth-child(2){display:flex;flex:1;flex-direction:column;gap:5px;min-width:0}
+.popular-grid strong{font-size:15px}.popular-grid small{font-size:12px;color:#aebbd4;line-height:1.5}
+.popular-grid>a>span:last-child{color:#bcaaff}
+.popular-icon{display:grid;place-items:center;flex:none;width:43px;height:43px;border-radius:12px;background:#342957;color:#d3c3ff;font-size:23px}
+body:not([data-tool-page]) .catalog{padding-top:24px}
+body:not([data-tool-page]) .category-grid{margin-bottom:36px}
+body:not([data-tool-page]) .tool-filters{padding:16px;border:1px solid #303c5a;border-radius:16px;background:#111a2e}
+body:not([data-tool-page]) .tool-search{max-width:none;min-width:180px;background:#0b1426}
+body:not([data-tool-page]) .tool-card{min-height:207px}
+@media(max-width:760px){.popular-grid{grid-template-columns:1fr}.popular-grid>a{padding:15px}.popular-heading h2{font-size:24px}}
+@media(max-width:520px){body:not([data-tool-page]) .hero{padding-top:54px;padding-bottom:45px}body:not([data-tool-page]) .hero h1{letter-spacing:-2px}.hero-actions{flex-direction:column;align-items:stretch;max-width:320px;margin:auto}.hero-actions>a{justify-content:center}.popular-tools{padding:0 16px 30px}.popular-heading{align-items:center}.popular-heading>a{font-size:12px}body:not([data-tool-page]) .tool-filters{padding:12px}body:not([data-tool-page]) .tool-card{min-height:185px}}
+@media(prefers-reduced-motion:reduce){.popular-grid>a{transition:none}.popular-grid>a:hover{transform:none}}
