@@ -15,3 +15,27 @@ function caseConverter(){area.innerHTML='<div class="tool-form"><label>Your text
 
 function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter})[k]();panel.scrollIntoView({behavior:'smooth'})}
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));$('#back').onclick=()=>{panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
+
+function setupToolDiscovery(){
+ const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count');
+ if(!search||!tabs.length||!empty||!count)return;
+ let category='all';
+ function filter(){
+  const query=search.value.trim().toLocaleLowerCase();
+  let visible=0;
+  for(const card of cards){
+   const match=(category==='all'||card.dataset.category===category)&&card.textContent.toLocaleLowerCase().includes(query);
+   card.hidden=!match;if(match)visible++;
+  }
+  count.textContent=visible+' of '+cards.length+' tools';
+  empty.hidden=visible!==0;
+ }
+ search.addEventListener('input',filter);
+ tabs.forEach(tab=>tab.addEventListener('click',()=>{
+  category=tab.dataset.filter;
+  tabs.forEach(t=>t.setAttribute('aria-pressed',String(t===tab)));
+  filter();
+ }));
+ filter();
+}
+setupToolDiscovery();
