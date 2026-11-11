@@ -50,8 +50,9 @@ function urlTool(){
  $('#url-copy').onclick=()=>output.value?copy(output.value):note('Generate a result first.',true);
 }
 
-function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool,url:urlTool})[k]();panel.scrollIntoView({behavior:'smooth'})}
-document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));$('#back').onclick=()=>{panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
+function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool,url:urlTool})[k]();if(!document.body.dataset.toolPage)panel.scrollIntoView({behavior:'smooth'})}
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));if($('#back'))$('#back').onclick=()=>{if(document.body.dataset.toolPage){location.href='/#tools';return}panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
+if(document.body.dataset.toolPage)open(document.body.dataset.toolPage);
 
 function setupToolDiscovery(){
  const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count'),more=$('#show-all-tools'),categories=[...document.querySelectorAll('[data-category-jump]')];
