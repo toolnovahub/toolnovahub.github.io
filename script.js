@@ -10,7 +10,55 @@ function words(){area.innerHTML='<div class="tool-form"><label>Enter text<textar
 function json(){area.innerHTML='<div class="tool-form"><label>JSON<textarea id="json" spellcheck="false" placeholder="{&quot;hello&quot;:&quot;world&quot;}"></textarea></label><div class="actions"><button class="action" id="format">Format</button><button class="secondary" id="minify">Minify</button><button class="secondary" id="copy">Copy</button></div></div>';function run(spaces){try{$('#json').value=JSON.stringify(JSON.parse($('#json').value),null,spaces);note('Valid JSON.')}catch(e){note('Invalid JSON: '+e.message,true)}}$('#format').onclick=()=>run(2);$('#minify').onclick=()=>run(0);$('#copy').onclick=()=>copy($('#json').value)}
 function colors(){area.innerHTML='<div class="tool-form"><label>Pick color<input type="color" id="pick" value="#8b5cf6"></label><div class="output" id="preview" style="height:110px"></div><label>HEX<input id="hex" readonly></label><label>RGB<input id="rgb" readonly></label><div class="actions"><button class="secondary" id="copyhex">Copy HEX</button><button class="secondary" id="copyrgb">Copy RGB</button></div></div>';function update(){const h=$('#pick').value;$('#hex').value=h.toUpperCase();$('#rgb').value='rgb('+parseInt(h.slice(1,3),16)+', '+parseInt(h.slice(3,5),16)+', '+parseInt(h.slice(5,7),16)+')';$('#preview').style.background=h}$('#pick').oninput=update;$('#copyhex').onclick=()=>copy($('#hex').value);$('#copyrgb').onclick=()=>copy($('#rgb').value);update()}
 
-function resize(){area.innerHTML='<div class="tool-form"><label>Choose an image<input type="file" id="resize-file" accept="image/*"></label><div class="options"><label>Width (px)<input id="resize-width" type="number" min="1" max="10000" value="800"></label><label>Height (px)<input id="resize-height" type="number" min="1" max="10000" value="600"></label></div><label class="inline-check"><input type="checkbox" id="resize-lock" checked> Keep aspect ratio</label><label>Output format<select id="resize-format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></label><button class="action" id="resize-run">Resize & download</button><small>Images are processed on your device. Animated images become a single frame.</small></div>';let ratio=4/3;const w=$('#resize-width'),h=$('#resize-height');$('#resize-file').onchange=async()=>{const file=$('#resize-file').files[0];if(!file)return;if(file.size>50e6)return note('Maximum file size is 50 MB.',true);try{const bitmap=await createImageBitmap(file);ratio=bitmap.width/bitmap.height;w.value=bitmap.width;h.value=bitmap.height;bitmap.close();note('Image loaded. Choose your dimensions.')}catch{note('Unsupported image.',true)}};w.oninput=()=>{if($('#resize-lock').checked&&Number(w.value)>0)h.value=Math.max(1,Math.round(Number(w.value)/ratio))};h.oninput=()=>{if($('#resize-lock').checked&&Number(h.value)>0)w.value=Math.max(1,Math.round(Number(h.value)*ratio))};$('#resize-run').onclick=async()=>{const file=$('#resize-file').files[0],width=Number(w.value),height=Number(h.value);if(!file)return note('Choose an image first.',true);if(!Number.isInteger(width)||!Number.isInteger(height)||width<1||height<1||width>10000||height>10000||width*height>40000000)return note('Dimensions must be valid and at most 40 megapixels.',true);try{const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');const type=$('#resize-format').value;if(type==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height)}ctx.drawImage(bitmap,0,0,width,height);bitmap.close();canvas.toBlob(blob=>{if(!blob)return note('Resize failed.',true);const ext=type==='image/jpeg'?'jpg':type.split('/')[1];save(blob,file.name.replace(/\.[^.]+$/,'')+'-'+width+'x'+height+'.'+ext);note('Resized to '+width+' × '+height+' pixels.')},type,.9)}catch{note('Could not resize this image.',true)}}}
+function resize(){
+ area.innerHTML='<div class="tool-form"><label>Choose an image<input type="file" id="resize-file" accept="image/*"></label><div class="options"><label>Width (px)<input id="resize-width" type="number" min="1" max="10000" value="800"></label><label>Height (px)<input id="resize-height" type="number" min="1" max="10000" value="600"></label></div><label class="inline-check"><input type="checkbox" id="resize-lock" checked> Keep aspect ratio</label><label>Output format<select id="resize-format"><option value="image/png">PNG</option><option value="image/jpeg">JPG</option><option value="image/webp">WebP</option></select></label><button class="action" id="resize-run">Resize & download</button><small>Maximum input: 50 MB and 40 megapixels. Output: up to 40 megapixels. Animated images become a single frame. Files stay on your device.</small></div>';
+ const input=$('#resize-file'),w=$('#resize-width'),h=$('#resize-height'),run=$('#resize-run');
+ const MAX_BYTES=50e6,MAX_PIXELS=4e7;let ratio=4/3,revision=0,loadedFile=null,processing=false;
+ function validDimensions(width,height){return Number.isInteger(width)&&Number.isInteger(height)&&width>=1&&height>=1&&width<=10000&&height<=10000&&width*height<=MAX_PIXELS}
+ function checkFile(file){if(!file)return 'Choose an image first.';if(file.size>MAX_BYTES)return 'Maximum file size is 50 MB.';if(file.type&&!file.type.startsWith('image/'))return 'Choose an image file.';return ''}
+ input.onchange=async()=>{
+  const current=++revision,file=input.files[0];loadedFile=null;
+  if(!file)return note('');
+  const error=checkFile(file);if(error)return note(error,true);
+  let bitmap;
+  try{
+   bitmap=await createImageBitmap(file);
+   if(current!==revision||input.files[0]!==file)return;
+   if(!bitmap.width||!bitmap.height||bitmap.width*bitmap.height>MAX_PIXELS)return note('Maximum source image resolution is 40 megapixels.',true);
+   ratio=bitmap.width/bitmap.height;w.value=bitmap.width;h.value=bitmap.height;loadedFile=file;
+   note('Image loaded. Choose your dimensions.');
+  }catch{if(current===revision)note('Unsupported image.',true)}
+  finally{if(bitmap)bitmap.close()}
+ };
+ w.oninput=()=>{if($('#resize-lock').checked&&Number(w.value)>0)h.value=Math.max(1,Math.round(Number(w.value)/ratio))};
+ h.oninput=()=>{if($('#resize-lock').checked&&Number(h.value)>0)w.value=Math.max(1,Math.round(Number(h.value)*ratio))};
+ run.onclick=async()=>{
+  if(processing)return;
+  const file=input.files[0],width=Number(w.value),height=Number(h.value),error=checkFile(file);
+  if(error)return note(error,true);
+  if(file!==loadedFile)return note('Wait for the image to load or choose a supported image.',true);
+  if(!validDimensions(width,height))return note('Dimensions must be valid, up to 10000 px per side and 40 megapixels.',true);
+  processing=true;run.disabled=true;
+  let bitmap;
+  try{
+   bitmap=await createImageBitmap(file);
+   if(!bitmap.width||!bitmap.height||bitmap.width*bitmap.height>MAX_PIXELS)return note('Maximum source image resolution is 40 megapixels.',true);
+   const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
+   const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');
+   const type=$('#resize-format').value;
+   if(type==='image/jpeg'){ctx.fillStyle='#fff';ctx.fillRect(0,0,width,height)}
+   ctx.drawImage(bitmap,0,0,width,height);
+   bitmap.close();bitmap=null;
+   const blob=await new Promise(resolve=>canvas.toBlob(resolve,type,.9));
+   canvas.width=0;canvas.height=0;
+   if(!blob)return note('Resize failed.',true);
+   const ext=type==='image/jpeg'?'jpg':type.split('/')[1];
+   save(blob,file.name.replace(/\.[^.]+$/,'')+'-'+width+'x'+height+'.'+ext);
+   note('Resized to '+width+' × '+height+' pixels.');
+  }catch{note('Could not resize this image.',true)}
+  finally{if(bitmap)bitmap.close();processing=false;run.disabled=false}
+ };
+}
 function caseConverter(){area.innerHTML='<div class="tool-form"><label>Your text<textarea id="case-text" placeholder="Paste or type text here..."></textarea></label><div class="actions"><button class="action" data-case="upper">UPPERCASE</button><button class="secondary" data-case="lower">lowercase</button><button class="secondary" data-case="title">Title Case</button><button class="secondary" data-case="sentence">Sentence case</button><button class="secondary" id="case-copy">Copy</button></div></div>';const field=$('#case-text');area.querySelectorAll('[data-case]').forEach(btn=>btn.onclick=()=>{const mode=btn.dataset.case;let t=field.value;if(mode==='upper')t=t.toUpperCase();if(mode==='lower')t=t.toLowerCase();if(mode==='title')t=t.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(mode==='sentence')t=t.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());field.value=t;note('Text converted.')});$('#case-copy').onclick=()=>copy(field.value)}
 
 
