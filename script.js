@@ -131,7 +131,7 @@ function base64Tool(){
   const source=lastEncodedInput!==null&&input.value===lastEncodedInput&&output.value===lastEncodedResult?lastEncodedResult:input.value;
   if(source.length>MAX_OUTPUT)return note('Base64 input is too large. Maximum is 2 million characters.',true);
   try{
-   const raw=atob(source.replace(/\\s+/g,'')),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+   const raw=atob(source.replace(/\s+/g,'')),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
    const decoded=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
    if(decoded.length>MAX_INPUT)return note('Decoded text exceeds the 1 million character limit.',true);
    output.value=decoded;lastEncodedInput=null;lastEncodedResult=null;
