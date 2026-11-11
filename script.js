@@ -1,6 +1,6 @@
 'use strict';
 const $=s=>document.querySelector(s),area=$('#tool-content'),panel=$('#workspace'),status=$('#status');$('#year').textContent=new Date().getFullYear();
-const names={compress:['Image Compressor','Reduce image size using JPEG or WebP quality.'],convert:['Image Converter','Convert PNG, JPG and WebP files.'],password:['Password Generator','Create secure random passwords locally.'],words:['Word Counter','Count words, characters and lines instantly.'],json:['JSON Formatter','Validate, format and minify JSON.'],colors:['Color Converter','Pick a color and copy HEX or RGB.'],resize:['Image Resizer','Resize images to exact pixel dimensions.'],case:['Text Case Converter','Change text to uppercase, lowercase or title case.'],base64:['Base64 Encoder / Decoder','Encode or decode Unicode text as Base64.'],uuid:['UUID Generator','Generate random version 4 UUIDs locally.'],imagebase64:['Image to Base64','Convert an image to a Base64 data URL locally.'],qr:['QR Code Generator','Create and download QR codes for links and text.']};
+const names={compress:['Image Compressor','Reduce image size using JPEG or WebP quality.'],convert:['Image Converter','Convert PNG, JPG and WebP files.'],password:['Password Generator','Create secure random passwords locally.'],words:['Word Counter','Count words, characters and lines instantly.'],json:['JSON Formatter','Validate, format and minify JSON.'],colors:['Color Converter','Pick a color and copy HEX or RGB.'],resize:['Image Resizer','Resize images to exact pixel dimensions.'],case:['Text Case Converter','Change text to uppercase, lowercase or title case.'],base64:['Base64 Encoder / Decoder','Encode or decode Unicode text as Base64.'],uuid:['UUID Generator','Generate random version 4 UUIDs locally.'],imagebase64:['Image to Base64','Convert an image to a Base64 data URL locally.'],qr:['QR Code Generator','Create and download QR codes for links and text.'],url:['URL Encoder / Decoder','Encode or decode URL text safely.']};
 function note(t,bad=false){status.textContent=t;status.className=bad?'error':''}
 function save(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),3000)}
 async function copy(t){try{await navigator.clipboard.writeText(t);note('Copied to clipboard.')}catch{note('Copy manually; clipboard permission unavailable.',true)}}
@@ -39,7 +39,18 @@ function qrTool(){
  download.onclick=()=>{if(!png)return note('Generate a QR code first.',true);const a=document.createElement('a');a.href=png;a.download='toolnovahub-qr.png';a.click();note('QR code downloaded.')};
 }
 
-function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool})[k]();panel.scrollIntoView({behavior:'smooth'})}
+
+function urlTool(){
+ area.innerHTML='<div class="tool-form"><label>Input text<textarea id="url-input" placeholder="Paste text or an encoded URL component..."></textarea></label><div class="actions"><button class="action" id="url-encode">Encode</button><button class="secondary" id="url-decode">Decode</button><button class="secondary" id="url-use">Use result as input</button><button class="secondary" id="url-copy">Copy result</button></div><label>Result<textarea id="url-output" readonly spellcheck="false"></textarea></label><small>Uses standard URL component encoding. For complete URLs, encode only the parameter values rather than the entire address. Processing stays in your browser.</small></div>';
+ const input=$('#url-input'),output=$('#url-output');let lastInput=null,lastEncoded=null;
+ input.addEventListener('input',()=>{lastInput=null;lastEncoded=null});
+ $('#url-encode').onclick=()=>{try{output.value=encodeURIComponent(input.value);lastInput=input.value;lastEncoded=output.value;note('Text encoded. Click Decode to reverse it.')}catch{note('Could not encode this text.',true)}};
+ $('#url-decode').onclick=()=>{const value=lastInput!==null&&input.value===lastInput&&output.value===lastEncoded?lastEncoded:input.value;try{output.value=decodeURIComponent(value);lastInput=null;lastEncoded=null;note('URL text decoded.')}catch{note('Invalid percent-encoding or UTF-8 sequence.',true)}};
+ $('#url-use').onclick=()=>{input.value=output.value;lastInput=null;lastEncoded=null;note('Result moved to input.')};
+ $('#url-copy').onclick=()=>output.value?copy(output.value):note('Generate a result first.',true);
+}
+
+function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool,url:urlTool})[k]();panel.scrollIntoView({behavior:'smooth'})}
 document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));$('#back').onclick=()=>{panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
 
 function setupToolDiscovery(){
