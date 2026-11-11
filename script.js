@@ -126,7 +126,7 @@ function caseConverter(){
   const mode=btn.dataset.case;let t=field.value;
   if(mode==='upper')t=t.toUpperCase();
   if(mode==='lower')t=t.toLowerCase();
-  if(mode==='title')t=t.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());
+  if(mode==='title')t=t.toLowerCase().replace(/(^|[^\p{L}\p{M}\p{N}])\p{L}/gu,c=>c.toUpperCase());
   if(mode==='sentence')t=t.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());
   if(t.length>MAX)return note('Converted text exceeds the 1 million character limit.',true);
   field.value=t;note('Text converted.');
@@ -137,7 +137,7 @@ function base64Tool(){
  area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. Decode uses the last encoded result when the input has not changed. Everything stays on your device.</small></div>';
  const input=$('#b64-input'),output=$('#b64-output'),MAX_INPUT=1000000,MAX_OUTPUT=2000000;
  let lastEncodedInput=null,lastEncodedResult=null;
- input.addEventListener('input',()=>{lastEncodedInput=null;lastEncodedResult=null});
+ input.addEventListener('input',()=>{lastEncodedInput=null;lastEncodedResult=null;output.value=''});
  $('#b64-encode').onclick=()=>{
   if(input.value.length>MAX_INPUT)return note('Input is too large. Maximum is 1 million characters.',true);
   try{
@@ -160,7 +160,7 @@ function base64Tool(){
    if(decoded.length>MAX_INPUT)return note('Decoded text exceeds the 1 million character limit.',true);
    output.value=decoded;lastEncodedInput=null;lastEncodedResult=null;
    note('Base64 decoded successfully.');
-  }catch{note('Invalid Base64 or non-UTF-8 data. Paste encoded text into Input.',true)}
+  }catch{output.value='';note('Invalid Base64 or non-UTF-8 data. Paste encoded text into Input.',true)}
  };
  $('#b64-copy').onclick=()=>output.value.length>MAX_OUTPUT?note('Result is too large to copy.',true):copy(output.value);
  $('#b64-use').onclick=()=>{if(output.value.length>MAX_OUTPUT)return note('Result is too large to move.',true);input.value=output.value;lastEncodedInput=null;lastEncodedResult=null;note('Result moved to input.')};
@@ -213,7 +213,7 @@ function urlTool(){
  area.innerHTML='<div class="tool-form"><label>Input text<textarea id="url-input" placeholder="Paste text or an encoded URL component..."></textarea></label><div class="actions"><button class="action" id="url-encode">Encode</button><button class="secondary" id="url-decode">Decode</button><button class="secondary" id="url-use">Use result as input</button><button class="secondary" id="url-copy">Copy result</button></div><label>Result<textarea id="url-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. For complete URLs, encode only parameter values. Processing stays in your browser.</small></div>';
  const input=$('#url-input'),output=$('#url-output'),MAX_INPUT=1000000,MAX_OUTPUT=3000000;
  let lastInput=null,lastEncoded=null;
- input.addEventListener('input',()=>{lastInput=null;lastEncoded=null});
+ input.addEventListener('input',()=>{lastInput=null;lastEncoded=null;output.value=''});
  $('#url-encode').onclick=()=>{
   if(input.value.length>MAX_INPUT)return note('Input exceeds the 1 million character limit.',true);
   try{
@@ -229,7 +229,7 @@ function urlTool(){
    const result=decodeURIComponent(value);
    if(result.length>MAX_INPUT)return note('Decoded result exceeds the 1 million character limit.',true);
    output.value=result;lastInput=null;lastEncoded=null;note('URL text decoded.');
-  }catch{note('Invalid percent-encoding or UTF-8 sequence.',true)}
+  }catch{output.value='';note('Invalid percent-encoding or UTF-8 sequence.',true)}
  };
  $('#url-use').onclick=()=>{if(output.value.length>MAX_OUTPUT)return note('Result is too large.',true);input.value=output.value;lastInput=null;lastEncoded=null;note('Result moved to input.')};
  $('#url-copy').onclick=()=>output.value?copy(output.value):note('Generate a result first.',true);
