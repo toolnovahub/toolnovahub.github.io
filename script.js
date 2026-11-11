@@ -38,7 +38,23 @@ function images(compress){
 }
 function passwords(){area.innerHTML='<div class="tool-form"><label>Length: <span id="len">20</span><input type="range" id="length" min="8" max="64" value="20"></label><div class="options"><label><input type="checkbox" id="upper" checked> Uppercase</label><label><input type="checkbox" id="lower" checked> Lowercase</label><label><input type="checkbox" id="digits" checked> Numbers</label><label><input type="checkbox" id="symbols" checked> Symbols</label></div><div class="output" id="result"></div><div class="actions"><button class="action" id="generate">Generate</button><button class="secondary" id="copy">Copy</button></div></div>';$('#length').oninput=()=>$('#len').textContent=$('#length').value;function rand(n){const a=new Uint32Array(1),limit=Math.floor(4294967296/n)*n;do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%n}function generate(){const sets=[['upper','ABCDEFGHIJKLMNOPQRSTUVWXYZ'],['lower','abcdefghijklmnopqrstuvwxyz'],['digits','0123456789'],['symbols','!@#$%^&*()-_=+?']].filter(v=>$('#'+v[0]).checked).map(v=>v[1]);if(!sets.length)return note('Select a character set.',true);const chars=sets.map(s=>s[rand(s.length)]),pool=sets.join('');while(chars.length<Number($('#length').value))chars.push(pool[rand(pool.length)]);for(let i=chars.length-1;i>0;i--){const j=rand(i+1);[chars[i],chars[j]]=[chars[j],chars[i]]}$('#result').textContent=chars.join('');note('Secure password generated.')}$('#generate').onclick=generate;$('#copy').onclick=()=>copy($('#result').textContent);generate()}
 function words(){area.innerHTML='<div class="tool-form"><label>Enter text<textarea id="text" placeholder="Start typing..."></textarea></label><div class="stats"><div class="stat"><strong id="wc">0</strong><small>Words</small></div><div class="stat"><strong id="cc">0</strong><small>Characters</small></div><div class="stat"><strong id="lc">0</strong><small>Lines</small></div></div><button class="secondary" id="clear">Clear</button></div>';function update(){const v=$('#text').value;$('#wc').textContent=v.trim()?v.trim().split(/\s+/u).length:0;$('#cc').textContent=Array.from(v).length;$('#lc').textContent=v?v.split(/\r\n|\n|\r/).length:0}$('#text').oninput=update;$('#clear').onclick=()=>{$('#text').value='';update()}}
-function json(){area.innerHTML='<div class="tool-form"><label>JSON<textarea id="json" spellcheck="false" placeholder="{&quot;hello&quot;:&quot;world&quot;}"></textarea></label><div class="actions"><button class="action" id="format">Format</button><button class="secondary" id="minify">Minify</button><button class="secondary" id="copy">Copy</button></div></div>';function run(spaces){try{$('#json').value=JSON.stringify(JSON.parse($('#json').value),null,spaces);note('Valid JSON.')}catch(e){note('Invalid JSON: '+e.message,true)}}$('#format').onclick=()=>run(2);$('#minify').onclick=()=>run(0);$('#copy').onclick=()=>copy($('#json').value)}
+function json(){
+ area.innerHTML='<div class="tool-form"><label>JSON<textarea id="json" spellcheck="false" placeholder="{&quot;hello&quot;:&quot;world&quot;}"></textarea></label><div class="actions"><button class="action" id="format">Format</button><button class="secondary" id="minify">Minify</button><button class="secondary" id="copy">Copy</button></div><small>Maximum input: 2 million characters. Processing stays in your browser.</small></div>';
+ const field=$('#json'),MAX_INPUT=2000000,MAX_OUTPUT=5000000;
+ function run(spaces){
+  const source=field.value;
+  if(source.length>MAX_INPUT)return note('JSON is too large. Maximum input is 2 million characters.',true);
+  try{
+   const parsed=JSON.parse(source),result=JSON.stringify(parsed,null,spaces);
+   if(result===undefined)return note('Unable to format this JSON.',true);
+   if(result.length>MAX_OUTPUT)return note('Formatted JSON exceeds the 5 million character output limit.',true);
+   field.value=result;note('Valid JSON.');
+  }catch(e){note('Invalid JSON: '+e.message,true)}
+ }
+ $('#format').onclick=()=>run(2);
+ $('#minify').onclick=()=>run(0);
+ $('#copy').onclick=()=>field.value.length>MAX_OUTPUT?note('Text exceeds the copy limit.',true):copy(field.value);
+}
 function colors(){area.innerHTML='<div class="tool-form"><label>Pick color<input type="color" id="pick" value="#8b5cf6"></label><div class="output" id="preview" style="height:110px"></div><label>HEX<input id="hex" readonly></label><label>RGB<input id="rgb" readonly></label><div class="actions"><button class="secondary" id="copyhex">Copy HEX</button><button class="secondary" id="copyrgb">Copy RGB</button></div></div>';function update(){const h=$('#pick').value;$('#hex').value=h.toUpperCase();$('#rgb').value='rgb('+parseInt(h.slice(1,3),16)+', '+parseInt(h.slice(3,5),16)+', '+parseInt(h.slice(5,7),16)+')';$('#preview').style.background=h}$('#pick').oninput=update;$('#copyhex').onclick=()=>copy($('#hex').value);$('#copyrgb').onclick=()=>copy($('#rgb').value);update()}
 
 function resize(){
@@ -93,7 +109,38 @@ function resize(){
 function caseConverter(){area.innerHTML='<div class="tool-form"><label>Your text<textarea id="case-text" placeholder="Paste or type text here..."></textarea></label><div class="actions"><button class="action" data-case="upper">UPPERCASE</button><button class="secondary" data-case="lower">lowercase</button><button class="secondary" data-case="title">Title Case</button><button class="secondary" data-case="sentence">Sentence case</button><button class="secondary" id="case-copy">Copy</button></div></div>';const field=$('#case-text');area.querySelectorAll('[data-case]').forEach(btn=>btn.onclick=()=>{const mode=btn.dataset.case;let t=field.value;if(mode==='upper')t=t.toUpperCase();if(mode==='lower')t=t.toLowerCase();if(mode==='title')t=t.toLowerCase().replace(/\b\p{L}/gu,c=>c.toUpperCase());if(mode==='sentence')t=t.toLowerCase().replace(/(^\s*\p{L}|[.!?]\s+\p{L})/gu,c=>c.toUpperCase());field.value=t;note('Text converted.')});$('#case-copy').onclick=()=>copy(field.value)}
 
 
-function base64Tool(){area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Decode uses the last encoded result when the input has not changed. You can also paste Base64 into Input or choose “Use result as input”. Everything stays on your device.</small></div>';const input=$('#b64-input'),output=$('#b64-output');let lastEncodedInput=null,lastEncodedResult=null;input.addEventListener('input',()=>{lastEncodedInput=null;lastEncodedResult=null});$('#b64-encode').onclick=()=>{try{const bytes=new TextEncoder().encode(input.value);let binary='';for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));output.value=btoa(binary);lastEncodedInput=input.value;lastEncodedResult=output.value;note('Text encoded. Click Decode to reverse it.')}catch{note('Could not encode this text.',true)}};$('#b64-decode').onclick=()=>{const source=lastEncodedInput!==null&&input.value===lastEncodedInput&&output.value===lastEncodedResult?lastEncodedResult:input.value;try{const raw=atob(source.replace(/\s+/g,'')),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));const decoded=new TextDecoder('utf-8',{fatal:true}).decode(bytes);output.value=decoded;lastEncodedInput=null;lastEncodedResult=null;note('Base64 decoded successfully.')}catch{note('Invalid Base64 or non-UTF-8 data. Paste encoded text into Input.',true)}};$('#b64-copy').onclick=()=>copy(output.value);$('#b64-use').onclick=()=>{input.value=output.value;lastEncodedInput=null;lastEncodedResult=null;note('Result moved to input.')}} 
+function base64Tool(){
+ area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. Decode uses the last encoded result when the input has not changed. Everything stays on your device.</small></div>';
+ const input=$('#b64-input'),output=$('#b64-output'),MAX_INPUT=1000000,MAX_OUTPUT=2000000;
+ let lastEncodedInput=null,lastEncodedResult=null;
+ input.addEventListener('input',()=>{lastEncodedInput=null;lastEncodedResult=null});
+ $('#b64-encode').onclick=()=>{
+  if(input.value.length>MAX_INPUT)return note('Input is too large. Maximum is 1 million characters.',true);
+  try{
+   const bytes=new TextEncoder().encode(input.value);
+   if(bytes.length>MAX_INPUT*3)return note('Encoded text is too large.',true);
+   let binary='';
+   for(let i=0;i<bytes.length;i+=8192)binary+=String.fromCharCode(...bytes.subarray(i,i+8192));
+   const result=btoa(binary);
+   if(result.length>MAX_OUTPUT)return note('Base64 result exceeds the output limit.',true);
+   output.value=result;lastEncodedInput=input.value;lastEncodedResult=result;
+   note('Text encoded. Click Decode to reverse it.');
+  }catch{note('Could not encode this text.',true)}
+ };
+ $('#b64-decode').onclick=()=>{
+  const source=lastEncodedInput!==null&&input.value===lastEncodedInput&&output.value===lastEncodedResult?lastEncodedResult:input.value;
+  if(source.length>MAX_OUTPUT)return note('Base64 input is too large. Maximum is 2 million characters.',true);
+  try{
+   const raw=atob(source.replace(/\\s+/g,'')),bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+   const decoded=new TextDecoder('utf-8',{fatal:true}).decode(bytes);
+   if(decoded.length>MAX_INPUT)return note('Decoded text exceeds the 1 million character limit.',true);
+   output.value=decoded;lastEncodedInput=null;lastEncodedResult=null;
+   note('Base64 decoded successfully.');
+  }catch{note('Invalid Base64 or non-UTF-8 data. Paste encoded text into Input.',true)}
+ };
+ $('#b64-copy').onclick=()=>output.value.length>MAX_OUTPUT?note('Result is too large to copy.',true):copy(output.value);
+ $('#b64-use').onclick=()=>{if(output.value.length>MAX_OUTPUT)return note('Result is too large to move.',true);input.value=output.value;lastEncodedInput=null;lastEncodedResult=null;note('Result moved to input.')};
+}
 function uuidTool(){area.innerHTML='<div class="tool-form"><label>How many UUIDs?<input type="number" id="uuid-count" min="1" max="100" value="5"></label><div class="actions"><button class="action" id="uuid-generate">Generate UUIDs</button><button class="secondary" id="uuid-copy">Copy all</button></div><label>Generated UUIDs<textarea id="uuid-output" readonly spellcheck="false"></textarea></label><small>Cryptographically random UUID version 4, generated locally.</small></div>';const output=$('#uuid-output');$('#uuid-generate').onclick=()=>{const count=Number($('#uuid-count').value);if(!Number.isInteger(count)||count<1||count>100)return note('Choose 1–100 UUIDs.',true);if(!crypto.randomUUID)return note('Your browser does not support secure UUID generation.',true);output.value=Array.from({length:count},()=>crypto.randomUUID()).join('\n');note(count+' UUIDs generated.')};$('#uuid-copy').onclick=()=>copy(output.value);$('#uuid-generate').click()}
 
 
