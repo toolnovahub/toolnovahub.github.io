@@ -51,7 +51,8 @@ function urlTool(){
 }
 
 function open(k){if(!names[k])return;$('#tool-title').textContent=names[k][0];$('#tool-description').textContent=names[k][1];panel.hidden=false;status.textContent='';status.className='';({compress:()=>images(true),convert:()=>images(false),password:passwords,words,json,colors,resize,case:caseConverter,base64:base64Tool,uuid:uuidTool,imagebase64:imageBase64Tool,qr:qrTool,url:urlTool})[k]();if(!document.body.dataset.toolPage)panel.scrollIntoView({behavior:'smooth'})}
-document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>open(b.dataset.tool));if($('#back'))$('#back').onclick=()=>{if(document.body.dataset.toolPage){location.href='/#tools';return}panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
+const toolPages={qr:'/tools/qr-code-generator/',compress:'/tools/image-compressor/',password:'/tools/password-generator/'};
+document.querySelectorAll('[data-tool]').forEach(b=>b.onclick=()=>{const destination=toolPages[b.dataset.tool];if(destination){location.assign(destination)}else{open(b.dataset.tool)}});if($('#back'))$('#back').onclick=()=>{if(document.body.dataset.toolPage){location.href='/#tools';return}panel.hidden=true;$('#tools').scrollIntoView({behavior:'smooth'})};
 if(document.body.dataset.toolPage)open(document.body.dataset.toolPage);
 
 function setupToolDiscovery(){
