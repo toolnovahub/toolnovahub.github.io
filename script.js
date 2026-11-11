@@ -259,7 +259,7 @@ function setupToolDiscovery(){
  const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count'),more=$('#show-all-tools'),categories=[...document.querySelectorAll('[data-category-jump]')];
  if(!search||!tabs.length||!empty||!count||!more)return;
  let category='all',expanded=false;
- const featured=new Set(['compress','convert','password','qr','words','json','splitpdf']);
+ const featured=new Set(['compress','convert','password','qr','words','json','splitpdf','mergepdf','pdftojpg']);
  function filter(){
   const query=search.value.trim().toLocaleLowerCase(),showEverything=expanded||category!=='all'||query.length>0;
   let visible=0,matched=0;
