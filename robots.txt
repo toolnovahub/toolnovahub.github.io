@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://toolnovahub.github.io/sitemap.xml
