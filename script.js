@@ -10,12 +10,12 @@ function images(compress){
  const MAX_BYTES=50e6,MAX_PIXELS=4e7;let processing=false,revision=0;
  quality.oninput=()=>$('#qval').textContent=quality.value;
  format.onchange=()=>$('#quality-label').hidden=format.value==='image/png';
- input.onchange=()=>{revision++;const file=input.files[0];if(!file)return note('');if(file.size>MAX_BYTES)return note('Maximum file size is 50 MB.',true);if(file.type&&!file.type.startsWith('image/'))return note('Choose an image file.',true);note('Image selected. Ready to process.')};
+ input.onchange=()=>{revision++;const file=input.files[0];if(!file)return note('');if(file.size>MAX_BYTES)return note('Maximum file size is 50 MB.',true);if(file.type&&!['image/jpeg','image/png','image/webp','image/bmp','image/gif','image/avif'].includes(file.type))return note('Choose a supported image file.',true);note('Image selected. Ready to process.')};
  run.onclick=async()=>{
   if(processing)return;
   const file=input.files[0];if(!file)return note('Choose an image first.',true);
   if(file.size>MAX_BYTES)return note('Maximum file size is 50 MB.',true);
-  if(file.type&&!file.type.startsWith('image/'))return note('Choose an image file.',true);
+  if(file.type&&!['image/jpeg','image/png','image/webp','image/bmp','image/gif','image/avif'].includes(file.type))return note('Choose a supported image file.',true);
   processing=true;run.disabled=true;const current=revision;let bitmap,canvas;
   try{
    bitmap=await createImageBitmap(file);
@@ -74,7 +74,7 @@ function resize(){
  const input=$('#resize-file'),w=$('#resize-width'),h=$('#resize-height'),run=$('#resize-run');
  const MAX_BYTES=50e6,MAX_PIXELS=4e7;let ratio=4/3,revision=0,loadedFile=null,processing=false;
  function validDimensions(width,height){return Number.isInteger(width)&&Number.isInteger(height)&&width>=1&&height>=1&&width<=10000&&height<=10000&&width*height<=MAX_PIXELS}
- function checkFile(file){if(!file)return 'Choose an image first.';if(file.size>MAX_BYTES)return 'Maximum file size is 50 MB.';if(file.type&&!file.type.startsWith('image/'))return 'Choose an image file.';return ''}
+ function checkFile(file){if(!file)return 'Choose an image first.';if(file.size>MAX_BYTES)return 'Maximum file size is 50 MB.';if(file.type&&!['image/jpeg','image/png','image/webp','image/bmp','image/gif','image/avif'].includes(file.type))return 'Choose a supported image file.';return ''}
  input.onchange=async()=>{
   const current=++revision,file=input.files[0];loadedFile=null;
   if(!file)return note('');
@@ -93,7 +93,7 @@ function resize(){
  h.oninput=()=>{if($('#resize-lock').checked&&Number(h.value)>0)w.value=Math.max(1,Math.round(Number(h.value)*ratio))};
  run.onclick=async()=>{
   if(processing)return;
-  const file=input.files[0],width=Number(w.value),height=Number(h.value),error=checkFile(file);
+  const file=input.files[0],width=Number(w.value),height=Number(h.value),error=checkFile(file),current=revision;
   if(error)return note(error,true);
   if(file!==loadedFile)return note('Wait for the image to load or choose a supported image.',true);
   if(!validDimensions(width,height))return note('Dimensions must be valid, up to 10000 px per side and 40 megapixels.',true);
@@ -101,6 +101,7 @@ function resize(){
   let bitmap;
   try{
    bitmap=await createImageBitmap(file);
+   if(current!==revision||input.files[0]!==file)return note('Image selection changed. Please try again.',true);
    if(!bitmap.width||!bitmap.height||bitmap.width*bitmap.height>MAX_PIXELS)return note('Maximum source image resolution is 40 megapixels.',true);
    const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
    const ctx=canvas.getContext('2d');if(!ctx)throw Error('Canvas unavailable');
@@ -110,6 +111,7 @@ function resize(){
    bitmap.close();bitmap=null;
    const blob=await new Promise(resolve=>canvas.toBlob(resolve,type,.9));
    canvas.width=0;canvas.height=0;
+   if(current!==revision||input.files[0]!==file)return note('Image selection changed. Please try again.',true);
    if(!blob)return note('Resize failed.',true);
    const ext=type==='image/jpeg'?'jpg':type.split('/')[1];
    save(blob,file.name.replace(/\.[^.]+$/,'')+'-'+width+'x'+height+'.'+ext);
