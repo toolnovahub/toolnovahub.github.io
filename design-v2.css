@@ -1,0 +1,27 @@
+/* ToolNovaHub V2 — homepage-only visual layer. Tool functionality untouched. */
+:root{--v2-glow:#8b5cf6}
+body{background:radial-gradient(ellipse 65% 28% at 50% 3%,#30245d66,transparent 75%),#090e1c}
+.topbar{border-bottom:1px solid #ffffff12}
+.hero{padding-top:88px;padding-bottom:82px}
+.hero::before{inset:0 4% auto;height:440px;background:radial-gradient(ellipse,#7c3aed33 0%,#2563eb12 42%,transparent 75%)}
+.hero-kicker{display:inline-flex;align-items:center;padding:9px 15px;border:1px solid #a78bfa55;border-radius:99px;background:#a78bfa12}
+.hero h1{font-size:clamp(48px,7.8vw,88px);line-height:1.07;letter-spacing:-.055em;text-shadow:0 12px 50px #0003}
+.hero p{max-width:660px;font-size:clamp(16px,1.8vw,19px)}
+.hero-actions{display:flex;justify-content:center;gap:12px;flex-wrap:wrap}
+.hero-actions a{min-height:50px;display:inline-flex;align-items:center;justify-content:center}
+.hero .primary{background:linear-gradient(110deg,#7c5cf0,#9968f8);box-shadow:0 12px 38px #8b5cf63b}
+.hero-secondary{padding:13px 22px;border:1px solid #445071;border-radius:12px;background:#1a2440;color:#e9edff;font-weight:700}
+.hero-secondary:hover{border-color:#a78bfa}
+.v2-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;max-width:680px;margin:37px auto 0}
+.v2-stat{padding:18px 12px;border:1px solid #4b427b66;border-radius:16px;background:linear-gradient(155deg,#222444bb,#111b32cc);box-shadow:0 12px 32px #0002}
+.v2-stat strong{display:block;font-size:clamp(22px,3vw,30px);letter-spacing:-.04em;color:#fff}
+.v2-stat span{display:block;margin-top:5px;font-size:12px;color:#b6c3df}
+.popular-tools{position:relative}
+.popular-grid a{border:1px solid #465175;background:linear-gradient(135deg,#1c2541,#111b30);box-shadow:0 14px 35px #0002;transition:transform .2s,border-color .2s}
+.popular-grid a:hover{transform:translateY(-4px);border-color:#a78bfa}
+.category-tile,.tool-card{background:linear-gradient(150deg,#1a2440,#111a2d);border-color:#364363}
+.tool-card:hover,.category-tile:hover{border-color:#a78bfa;box-shadow:0 18px 45px #070a1e77}
+.catalog .section-head h2{font-size:clamp(32px,4vw,44px)}
+.v2-stat:focus-visible,.hero-secondary:focus-visible{outline:3px solid #c2b1ff;outline-offset:3px}
+@media(max-width:600px){.hero{padding-top:65px;padding-bottom:60px}.v2-stats{gap:8px;margin-top:27px}.v2-stat{padding:14px 6px}.v2-stat span{font-size:10px}.hero-actions a{flex:1 1 160px}.hero h1{letter-spacing:-.045em}}
+@media(prefers-reduced-motion:reduce){.popular-grid a{transition:none}.popular-grid a:hover{transform:none}}
