@@ -56,3 +56,16 @@ body{background:radial-gradient(ellipse 65% 28% at 50% 3%,#30245d66,transparent 
 .v2-demo-saving span{font-size:11px;font-weight:500;color:#b8c6db}
 @media(max-width:900px){.hero{grid-template-columns:1fr;gap:28px;text-align:center;padding-top:66px}.hero p{margin:0 auto 28px}.hero-actions,.hero .trust{justify-content:center}.v2-demo{width:min(100%,520px);margin:auto;transform:none}.v2-stats{margin-top:0}}
 @media(max-width:520px){.hero{padding:55px 18px 50px}.v2-demo-inner{padding:15px}.v2-demo-art{height:135px}.v2-demo-result strong{font-size:20px}.v2-demo-top{padding:12px 10px;font-size:9px}.v2-demo-local{font-size:9px}}
+
+/* V2.2: compact, single-directory discovery layout */
+.popular-tools,.category-grid,.tool-list-heading{display:none!important}
+.hero{padding-bottom:48px}
+.catalog{padding-top:32px}
+.catalog .section-head{margin-bottom:22px}
+.catalog .tool-filters{padding:18px;border:1px solid #3b456b;border-radius:18px;background:#131d33;gap:16px}
+.catalog .tool-search{max-width:100%;flex:1 1 280px;background:#0d1528}
+.catalog .filter-tabs{justify-content:flex-start}
+.catalog .filter-tab[data-filter="pdf"]{border-color:#7666b4;color:#ded3ff}
+.about{padding-top:38px;padding-bottom:50px}
+.v2-stats{margin-top:25px}
+@media(max-width:900px){.hero{padding-bottom:40px}}
