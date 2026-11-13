@@ -1,4 +1,4 @@
-/* ToolNovaHub V2 — homepage-only visual layer. Tool functionality untouched. */
+/* ToolsNova V2 — homepage-only visual layer. Tool functionality untouched. */
 :root{--v2-glow:#8b5cf6}
 body{background:radial-gradient(ellipse 65% 28% at 50% 3%,#30245d66,transparent 75%),#090e1c}
 .topbar{border-bottom:1px solid #ffffff12}
