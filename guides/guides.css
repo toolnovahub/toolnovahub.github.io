@@ -26,3 +26,15 @@
   .guide-article>.guide-section{padding:19px 17px;border-radius:15px;margin-bottom:16px}
   .guide-article>.guide-section h2{font-size:23px}
 }
+
+/* Wider editorial layout: aligned article sections without excessively long text lines. */
+.guide-wrap .guide-article{width:100%;max-width:960px;margin-inline:auto}
+.guide-wrap .guide-article>.guide-article-head{max-width:880px}
+.guide-wrap .guide-article>.guide-section{width:100%;margin-bottom:22px}
+.guide-wrap .guide-article>.guide-section p,
+.guide-wrap .guide-article>.guide-section ul,
+.guide-wrap .guide-article>.guide-section ol{max-width:85ch}
+.guide-wrap .guide-bottom{max-width:960px}
+@media(max-width:520px){
+  .guide-wrap .guide-article>.guide-section{margin-bottom:16px}
+}
