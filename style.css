@@ -172,3 +172,6 @@ body:not([data-tool-page]) a:focus-visible{outline:3px solid #c2b1ff;outline-off
 @media(max-width:760px){body:not([data-tool-page]) .topbar nav{gap:15px}body:not([data-tool-page]) .hero{padding-top:67px;padding-bottom:55px}body:not([data-tool-page]) .category-grid{margin-bottom:36px}}
 @media(max-width:520px){body:not([data-tool-page]) .topbar{height:72px}body:not([data-tool-page]) .topbar nav{gap:11px}body:not([data-tool-page]) .topbar nav a:first-child{display:none}body:not([data-tool-page]) .topbar nav a:last-child{padding:8px 10px}body:not([data-tool-page]) .hero{padding-top:52px;padding-bottom:46px}body:not([data-tool-page]) .hero h1{letter-spacing:-2px;font-size:clamp(43px,10vw,60px)}body:not([data-tool-page]) .hero p{font-size:16px;line-height:1.7}body:not([data-tool-page]) .hero-kicker{font-size:10px;letter-spacing:.7px}body:not([data-tool-page]) .popular-tools{padding-bottom:44px}body:not([data-tool-page]) .category-tile{min-height:158px}body:not([data-tool-page]) .home-footer{align-items:flex-start;flex-direction:column;gap:20px}}
 @media(prefers-reduced-motion:reduce){body:not([data-tool-page]) .topbar nav a{transition:none}}
+
+/* Desktop-only Home navigation for the 30 individual tool pages. */
+@media(max-width:900px){.topbar nav>.tool-nav-home{display:none!important}}
