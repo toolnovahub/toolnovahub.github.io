@@ -6,4 +6,4 @@ const script=document.createElement("script");script.src="/tool-help.js?v=1";scr
 })();
 
 /* Shared visual polish for homepage, category, guide and tool headings. */
-(()=>{if(document.querySelector('link[href^="/heading-polish.css"]'))return;const l=document.createElement("link");l.rel="stylesheet";l.href="/heading-polish.css?v=1";document.head.appendChild(l);})();
+(()=>{if(document.querySelector('link[href^="/heading-polish.css"]'))return;const l=document.createElement("link");l.rel="stylesheet";l.href="/heading-polish.css?v=2";document.head.appendChild(l);})();
