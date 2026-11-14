@@ -1,7 +1,8 @@
 /* ToolNova: compact tool discovery on desktop only. Hidden on mobile/tablet. */
 .tn-tool-finder{display:none}
 @media(min-width:901px){
-  .tool-page>.tn-breadcrumbs-with-finder{margin-bottom:22px}
+  /* Main navigation + finder already provide desktop navigation; keep breadcrumbs on mobile. */
+  .tool-page>.tn-breadcrumbs-with-finder{display:none}
   .tn-tool-finder{position:relative;z-index:5;display:flex;align-items:center;flex-wrap:wrap;gap:14px;padding:16px;margin:0 0 28px;border:1px solid #35415f;border-radius:17px;background:#121b2e}
   .tn-tool-finder-search{position:relative;flex:1 1 380px;min-width:230px}
   .tn-tool-finder-search input{display:block;width:100%;min-height:50px;padding:13px 16px;font:inherit;font-size:15px;line-height:1.5;color:#e8edff;border:1px solid #3b4869;border-radius:12px;background:#0b1426;outline-offset:3px}
