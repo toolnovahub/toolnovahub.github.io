@@ -1,3 +1,5 @@
+/* Use the same balanced logo in the header, footer, and other shared branding on every page. */
+(()=>{const src="/toolsnova-tools.svg?v=4";document.querySelectorAll('img[src^="/toolsnova-tools.svg"]').forEach(img=>{if(img.getAttribute("src")!==src)img.setAttribute("src",src)})})();
 (()=>{const menu=document.querySelector(".nav-categories");if(!menu)return;document.addEventListener("pointerdown",event=>{if(menu.open&&!menu.contains(event.target))menu.open=false});document.addEventListener("keydown",event=>{if(event.key==="Escape"&&menu.open){menu.open=false;menu.querySelector("summary").focus()}})})();
 /* Load the matching guidance on tool pages only. */
 (()=>{if(!/^\/tools\/[^/]+\/?$/.test(location.pathname)||!document.querySelector(".tool-explainer"))return;
