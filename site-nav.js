@@ -4,3 +4,6 @@
 const css=document.createElement("link");css.rel="stylesheet";css.href="/tool-help.css?v=3";document.head.appendChild(css);
 const script=document.createElement("script");script.src="/tool-help.js?v=1";script.defer=true;document.head.appendChild(script);
 })();
+
+/* Shared visual polish for homepage, category, guide and tool headings. */
+(()=>{if(document.querySelector('link[href^="/heading-polish.css"]'))return;const l=document.createElement("link");l.rel="stylesheet";l.href="/heading-polish.css?v=1";document.head.appendChild(l);})();
