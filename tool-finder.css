@@ -24,3 +24,6 @@
   .tn-tool-finder-search{flex-basis:100%}
   .tn-tool-finder-categories{width:100%}
 }
+
+/* Keep the Tools dropdown above the finder, desktop only. */
+@media(min-width:901px){.topbar{z-index:20}}
