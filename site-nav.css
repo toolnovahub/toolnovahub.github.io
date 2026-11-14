@@ -37,3 +37,12 @@ body:not([data-tool-page]) .nav-categories-menu{min-width:170px}
 
 /* Desktop-only Home link; mobile/tablet navigation unchanged. */
 @media(max-width:900px){body:not([data-tool-page]) .topbar nav>.nav-home{display:none!important}}
+
+/* Category pages: desktop navigation is already provided by the shared header. */
+@media(min-width:901px){
+  .pdf-wrap > .breadcrumbs,
+  .image-wrap > .breadcrumbs,
+  .text-wrap > .breadcrumbs,
+  .developer-wrap > .breadcrumbs,
+  .security-wrap > .breadcrumbs{display:none}
+}
