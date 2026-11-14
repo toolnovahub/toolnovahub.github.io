@@ -275,3 +275,52 @@
     overflow-wrap:anywhere;
   }
 }
+
+/* Privacy Policy: consistent navy cards matching ToolsNova category pages. */
+.tool-page .tn-privacy-policy{
+  max-width:1100px;
+  margin:38px 0 0;
+  padding:clamp(18px,3vw,32px);
+  border:1px solid #303b59;
+  border-radius:22px;
+  background:linear-gradient(140deg,#172039,#101829);
+}
+.tool-page .tn-privacy-policy .tn-privacy-card{
+  box-sizing:border-box;
+  padding:clamp(18px,2.5vw,24px);
+  margin:0 0 15px;
+  background:#131c30;
+  border:1px solid #303b55;
+  border-radius:16px;
+}
+.tool-page .tn-privacy-policy .tn-privacy-card:last-child{margin-bottom:0}
+.tool-page .tn-privacy-policy .tn-privacy-card h2{
+  font-size:clamp(19px,2.4vw,24px);
+  line-height:1.32;
+  letter-spacing:-.025em;
+  color:#f3f5ff;
+  margin:0 0 12px;
+}
+.tool-page .tn-privacy-policy .tn-privacy-card p{
+  margin:0 0 14px;
+  color:#c0cde5;
+  font-size:16px;
+  line-height:1.8;
+  overflow-wrap:break-word;
+}
+.tool-page .tn-privacy-policy .tn-privacy-card p:last-child{margin-bottom:0}
+.tool-page .tn-privacy-policy a{
+  color:#cbbaff;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+.tool-page .tn-privacy-policy a:focus-visible{
+  outline:2px solid #d2c4ff;
+  outline-offset:3px;
+  border-radius:3px;
+}
+@media(max-width:650px){
+  .tool-page .tn-privacy-policy{margin-top:28px;padding:14px;border-radius:17px}
+  .tool-page .tn-privacy-policy .tn-privacy-card{padding:16px 15px;border-radius:13px}
+  .tool-page .tn-privacy-policy .tn-privacy-card p{font-size:15px;line-height:1.75}
+}
