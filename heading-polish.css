@@ -156,3 +156,64 @@
   content:none;
   display:none;
 }
+
+/* Five category landing pages: structured explanation panels below tool cards.
+   All original prose, hyperlinks and guide callouts remain intact. */
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content){
+  max-width:1100px;
+  margin:44px auto 0;
+  padding:clamp(20px,3vw,34px);
+  border:1px solid #303b59;
+  border-radius:22px;
+  background:linear-gradient(140deg,#172039,#101829);
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>h2{
+  margin:0 0 24px;
+  color:#f3f5ff;
+  font-size:clamp(25px,3.5vw,34px);
+  line-height:1.2;
+  letter-spacing:-.025em;
+  text-wrap:balance;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>.tn-category-info-card{
+  padding:clamp(18px,2.5vw,24px);
+  margin:0 0 14px;
+  background:#131c30;
+  border:1px solid #303b55;
+  border-radius:16px;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>.tn-category-info-card h3{
+  margin:0 0 10px;
+  font-size:clamp(17px,2vw,20px);
+  font-weight:750;
+  line-height:1.35;
+  color:#edf1ff;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>.tn-category-info-card p{
+  margin:0;
+  color:#c0cde5;
+  font-size:16px;
+  line-height:1.8;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside{
+  margin-top:24px;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>p:last-child{
+  margin:22px 0 0;
+}
+@media(max-width:650px){
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content){
+    padding:18px 14px;
+    margin-top:28px;
+    border-radius:17px;
+  }
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>.tn-category-info-card{
+    padding:16px 15px;
+    border-radius:13px;
+  }
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>.tn-category-info-card p{
+    font-size:15px;
+    line-height:1.75;
+    overflow-wrap:anywhere;
+  }
+}
