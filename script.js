@@ -136,7 +136,8 @@ function caseConverter(){
  $('#case-copy').onclick=()=>field.value.length>MAX?note('Text is too large to copy.',true):copy(field.value);
 }
 function base64Tool(){
- area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. Decode uses the last encoded result when the input has not changed. Everything stays on your device.</small></div>';
+ // Hydrate the pre-rendered form on the Base64 page; other entry points still generate the form.
+ if(!area.querySelector('#b64-input'))area.innerHTML='<div class="tool-form"><label>Input text<textarea id="b64-input" placeholder="Enter text or Base64..."></textarea></label><div class="actions"><button class="action" id="b64-encode">Encode Base64</button><button class="secondary" id="b64-decode">Decode Base64</button><button class="secondary" id="b64-copy">Copy result</button><button class="secondary" id="b64-use">Use result as input</button></div><label>Result<textarea id="b64-output" readonly spellcheck="false"></textarea></label><small>Maximum input: 1 million characters. Decode uses the last encoded result when the input has not changed. Everything stays on your device.</small></div>';
  const input=$('#b64-input'),output=$('#b64-output'),MAX_INPUT=1000000,MAX_OUTPUT=2000000;
  let lastEncodedInput=null,lastEncodedResult=null;
  input.addEventListener('input',()=>{lastEncodedInput=null;lastEncodedResult=null;output.value=''});
