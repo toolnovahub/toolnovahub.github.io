@@ -217,3 +217,61 @@
     overflow-wrap:anywhere;
   }
 }
+
+/* Unified bottom sections across all five category pages: the guide callout
+   and the final navigation line use the same navy card language. */
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside{
+  box-sizing:border-box;
+  margin:16px 0 14px;
+  padding:clamp(18px,2.5vw,24px);
+  background:#131c30;
+  border:1px solid #303b55;
+  border-radius:16px;
+  color:#c0cde5;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside strong{
+  display:block;
+  margin:0 0 10px;
+  font-size:clamp(17px,2vw,20px);
+  font-weight:750;
+  color:#edf1ff;
+  line-height:1.35;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside p{
+  margin:0 0 14px;
+  font-size:16px;
+  line-height:1.8;
+  color:#c0cde5;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside a{
+  color:#cbbaff;
+  text-decoration:underline;
+  text-underline-offset:3px;
+}
+:is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>p:last-child{
+  box-sizing:border-box;
+  margin:0;
+  padding:17px clamp(18px,2.5vw,24px);
+  background:#131c30;
+  border:1px solid #303b55;
+  border-radius:16px;
+  color:#c0cde5;
+  font-size:15px;
+  line-height:1.7;
+}
+@media(max-width:650px){
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside{
+    margin:14px 0;
+    padding:16px 15px;
+    border-radius:13px;
+  }
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>aside p{
+    font-size:15px;
+    line-height:1.75;
+  }
+  :is(.pdf-content,.image-content,.text-content,.developer-content,.security-content)>p:last-child{
+    padding:16px 15px;
+    border-radius:13px;
+    overflow-wrap:anywhere;
+  }
+}
