@@ -9,3 +9,34 @@ const script=document.createElement("script");script.src="/tool-help.js?v=1";scr
 
 /* Shared visual polish for homepage, category, guide and tool headings. */
 (()=>{if(document.querySelector('link[href^="/heading-polish.css"]'))return;const l=document.createElement("link");l.rel="stylesheet";l.href="/heading-polish.css?v=9";document.head.appendChild(l);})();
+
+
+/* Back-to-top button for all 30 individual tool pages, without duplicating existing buttons. */
+(()=>{
+  if(!/^\/tools\/[^/]+\/?$/.test(location.pathname))return;
+  const css=document.createElement("link");
+  css.rel="stylesheet";
+  css.href="/tool-back-to-top.css?v=1";
+  document.head.appendChild(css);
+  let button=document.getElementById("back-to-top");
+  if(button)return;
+  button=document.createElement("button");
+  button.id="back-to-top";
+  button.className="back-to-top";
+  button.type="button";
+  button.setAttribute("aria-label","Back to top");
+  button.title="Back to top";
+  button.hidden=true;
+  const arrow=document.createElement("span");
+  arrow.setAttribute("aria-hidden","true");
+  arrow.textContent="↑";
+  button.appendChild(arrow);
+  document.body.appendChild(button);
+  const update=()=>{button.hidden=window.scrollY<450};
+  window.addEventListener("scroll",update,{passive:true});
+  update();
+  button.addEventListener("click",()=>window.scrollTo({
+    top:0,
+    behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"instant":"smooth"
+  }));
+})();
