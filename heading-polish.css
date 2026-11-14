@@ -324,3 +324,19 @@
   .tool-page .tn-privacy-policy .tn-privacy-card{padding:16px 15px;border-radius:13px}
   .tool-page .tn-privacy-policy .tn-privacy-card p{font-size:15px;line-height:1.75}
 }
+
+/* Tool FAQs: native HTML details, keyboard accessible and JS-free. */
+.tool-page .tn-tool-faq{margin-top:62px}
+.tool-page .tn-tool-faq>.eyebrow{margin-bottom:12px}
+.tool-page .tn-tool-faq>h2{font-size:clamp(25px,3.5vw,34px);line-height:1.2;letter-spacing:-.03em;margin:0 0 22px;color:#f3f5ff;text-wrap:balance}
+.tool-page .tn-faq-list{display:grid;gap:12px}
+.tool-page .tn-faq-item{background:#131c30;border:1px solid #303b55;border-radius:16px;overflow:hidden}
+.tool-page .tn-faq-item[open]{border-color:#68568e;background:#172039}
+.tool-page .tn-faq-item summary{display:flex;justify-content:space-between;align-items:center;gap:16px;cursor:pointer;list-style:none;padding:20px 22px;color:#edf1ff;font-size:16px;font-weight:700;line-height:1.5}
+.tool-page .tn-faq-item summary::-webkit-details-marker{display:none}
+.tool-page .tn-faq-item summary::after{content:"+";flex:0 0 28px;width:28px;height:28px;border:1px solid #55447d;border-radius:9px;display:grid;place-items:center;font-size:20px;line-height:1;color:#c7b7ff;background:#25203e}
+.tool-page .tn-faq-item[open] summary::after{content:"−"}
+.tool-page .tn-faq-item summary:focus-visible{outline:3px solid #bca7ff;outline-offset:-4px;border-radius:14px}
+.tool-page .tn-faq-item .tn-faq-answer{padding:0 22px 20px;color:#c0cde5;font-size:15px;line-height:1.75}
+.tool-page .tn-faq-item .tn-faq-answer p{margin:0}
+@media(max-width:650px){.tool-page .tn-tool-faq{margin-top:42px}.tool-page .tn-faq-item summary{padding:17px 15px;font-size:15px}.tool-page .tn-faq-item .tn-faq-answer{padding:0 15px 17px;font-size:14px}}
