@@ -47,3 +47,63 @@
   .section-head h2,.about h2,#tn-faq-title{line-height:1.2}
   .related-tools .related-head{align-items:flex-start}
 }
+
+/* Unified small pill labels: 30 tools (top and bottom), site sections and
+   the five category landing pages. Keep the hero pill unchanged. */
+.eyebrow:not(.hero-kicker),
+.pdf-head .pdf-label,
+.image-head .image-label,
+.text-head .text-label,
+.developer-head .developer-label,
+.security-head .security-label{
+  display:inline-flex;
+  width:fit-content;
+  max-width:100%;
+  align-items:center;
+  gap:9px;
+  padding:9px 14px;
+  margin:0 0 14px;
+  border:1px solid rgba(167,139,250,.28);
+  border-radius:999px;
+  background:rgba(167,139,250,.075);
+  color:#c7b7ff;
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.13em;
+  line-height:1.5;
+  text-transform:uppercase;
+  vertical-align:middle;
+}
+.eyebrow:not(.hero-kicker)::before,
+.pdf-head .pdf-label::before,
+.image-head .image-label::before,
+.text-head .text-label::before,
+.developer-head .developer-label::before,
+.security-head .security-label::before{
+  content:"";
+  display:block;
+  flex:0 0 7px;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#ad92fa;
+  box-shadow:0 0 0 3px rgba(167,139,250,.12);
+}
+.tool-page-heading .eyebrow,
+.related-tools>.eyebrow{
+  margin-bottom:13px;
+}
+@media(max-width:600px){
+  .eyebrow:not(.hero-kicker),
+  .pdf-head .pdf-label,
+  .image-head .image-label,
+  .text-head .text-label,
+  .developer-head .developer-label,
+  .security-head .security-label{
+    padding:8px 11px;
+    font-size:10px;
+    letter-spacing:.085em;
+    gap:8px;
+    white-space:normal;
+  }
+}
