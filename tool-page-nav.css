@@ -23,3 +23,10 @@
  .topbar nav.tool-page-top-nav > .tool-nav-guides{display:none!important}
  .topbar nav.tool-page-top-nav > .tool-nav-mobile-all{display:inline-flex;align-items:center}
 }
+
+/* Desktop navigation alignment: match the homepage header. */
+@media(min-width:901px){
+  .topbar nav.tool-page-top-nav{align-items:center}
+  .topbar nav.tool-page-top-nav > a{display:inline-flex;align-items:center;min-height:38px;white-space:nowrap}
+  .topbar nav.tool-page-top-nav > .nav-categories{align-self:center}
+}
