@@ -30,3 +30,31 @@
   .topbar nav.tool-page-top-nav > a{display:inline-flex;align-items:center;min-height:38px;white-space:nowrap}
   .topbar nav.tool-page-top-nav > .nav-categories{align-self:center}
 }
+
+/* Match the homepage header framing on tool pages (desktop only). */
+@media(min-width:901px){
+  header.topbar:has(>nav.tool-page-top-nav){
+    position:relative;
+    z-index:90;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    width:100%;
+    max-width:1200px;
+    min-height:78px;
+    height:auto;
+    padding:12px 24px;
+    margin:0 auto;
+    border-bottom:1px solid #ffffff12;
+  }
+  header.topbar > nav.tool-page-top-nav{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    flex-wrap:wrap;
+    gap:clamp(12px,2vw,26px);
+    font-size:14px;
+    color:#b8c1db;
+  }
+}
