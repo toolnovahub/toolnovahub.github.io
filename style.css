@@ -175,3 +175,8 @@ body:not([data-tool-page]) a:focus-visible{outline:3px solid #c2b1ff;outline-off
 
 /* Desktop-only Home navigation for the 30 individual tool pages. */
 @media(max-width:900px){.topbar nav>.tool-nav-home{display:none!important}}
+
+
+/* A restrained violet shield-check icon for Privacy first panels. */
+.tool-privacy>.privacy-shield{display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;border:1px solid #5a4988;border-radius:12px;background:#30254d;color:#cbbcff;font-size:initial}
+.tool-privacy>.privacy-shield svg{display:block;width:24px;height:24px}
