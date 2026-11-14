@@ -99,3 +99,24 @@ body{background:radial-gradient(ellipse 65% 28% at 50% 3%,#30245d66,transparent 
 .back-to-top:focus-visible{outline:3px solid #d2c4ff;outline-offset:3px}
 @media(max-width:600px){.back-to-top{right:16px;bottom:18px;width:44px;height:44px;font-size:23px}}
 @media(prefers-reduced-motion:reduce){.back-to-top{transition:none}}
+
+/* Homepage: useful category discovery links and editorial context. */
+.tn-category-section{max-width:1150px;margin:0 auto;padding:58px 24px 84px;border-top:1px solid #263047}
+.tn-category-intro{max-width:790px;margin-bottom:30px}
+.tn-category-intro h2{font-size:clamp(28px,4vw,40px);line-height:1.15;letter-spacing:-.04em;margin:12px 0 14px;color:#f3f2ff}
+.tn-category-intro>p{font-size:16px;line-height:1.75;color:#c9d3e9;margin:0}
+.tn-category-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.tn-category-card{display:flex;flex-direction:column;min-width:0;padding:25px;border:1px solid #40436b;border-radius:18px;background:linear-gradient(145deg,#1a2340,#121a31);box-shadow:0 12px 36px #00000021;transition:border-color .18s ease,transform .18s ease}
+.tn-category-card:hover{border-color:#a88fff;transform:translateY(-2px)}
+.tn-category-card-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tn-category-icon{display:grid;place-items:center;width:47px;height:47px;padding:2px;border:1px solid #8062be77;border-radius:12px;background:#39275a;color:#d8c3ff;font-size:21px;font-weight:800;line-height:1}
+.tn-category-count{color:#c4b6f9;font-size:11px;font-weight:800;letter-spacing:1.1px;white-space:nowrap}
+.tn-category-card h3{font-size:21px;line-height:1.25;letter-spacing:-.4px;margin:22px 0 11px;color:#f7f5ff}
+.tn-category-card h3 a:hover{color:#d7c6ff}
+.tn-category-card p{font-size:14px;line-height:1.7;color:#c3cee4;margin:0 0 22px;flex:1}
+.tn-category-cta{align-self:flex-start;color:#d2bfff;font-size:14px;font-weight:800;line-height:1.4}
+.tn-category-cta:hover{text-decoration:underline;text-underline-offset:5px}
+.tn-category-card a:focus-visible{outline:3px solid #d2c4ff;outline-offset:4px;border-radius:3px}
+@media(max-width:940px){.tn-category-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.tn-category-section{padding:44px 18px 62px}.tn-category-intro{margin-bottom:24px}.tn-category-intro>p{font-size:15px}.tn-category-cards{grid-template-columns:1fr;gap:13px}.tn-category-card{padding:22px}.tn-category-card h3{margin-top:18px}}
+@media(prefers-reduced-motion:reduce){.tn-category-card{transition:none}.tn-category-card:hover{transform:none}}
