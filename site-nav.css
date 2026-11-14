@@ -34,3 +34,6 @@ body:not([data-tool-page]) .nav-categories-menu{min-width:170px}
   body:not([data-tool-page]) .nav-categories summary{font-size:14px}
   body:not([data-tool-page]) .topbar nav .nav-categories-menu a{font-size:14px!important}
 }
+
+/* Desktop-only Home link; mobile/tablet navigation unchanged. */
+@media(max-width:900px){body:not([data-tool-page]) .topbar nav>.nav-home{display:none!important}}
