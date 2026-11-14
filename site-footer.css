@@ -29,3 +29,10 @@ footer.tn-site-footer{
   .tn-site-footer .tn-footer-links{justify-content:flex-start;gap:10px 22px}
   .tn-site-footer .tn-footer-copyright{justify-self:start}
 }
+
+/* Shared ToolsNova crossed-tools mark: header and footer. */
+.topbar .brandmark > img{display:block;width:24px;height:24px}
+.tn-site-footer .tn-footer-title{display:inline-flex;align-items:center;gap:9px}
+.tn-site-footer .tn-footer-badge{display:inline-grid;place-items:center;flex:0 0 30px;width:30px;height:30px;border:1px solid #6b56a7;border-radius:9px;background:linear-gradient(145deg,#30225b,#192a4b)}
+.tn-site-footer .tn-footer-badge > img{display:block;width:21px;height:21px}
+.tn-site-footer .tn-footer-wordmark > span{color:#aa9cff}
