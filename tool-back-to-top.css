@@ -1,0 +1,7 @@
+/* Shared accessible back-to-top button on ToolsNova tool pages. */
+.back-to-top{position:fixed;right:24px;bottom:24px;z-index:90;width:48px;height:48px;display:grid;place-items:center;border:1px solid #7564b5;border-radius:50%;background:linear-gradient(145deg,#302650,#1a1a35);color:#f5f1ff;box-shadow:0 8px 24px #0007;cursor:pointer;font:700 25px/1 system-ui,sans-serif;transition:transform .18s ease,border-color .18s ease,background .18s ease}
+.back-to-top[hidden]{display:none!important}
+.back-to-top:hover{transform:translateY(-3px);border-color:#b9a6ff;background:#3b2d68}
+.back-to-top:focus-visible{outline:3px solid #d2c4ff;outline-offset:3px}
+@media(max-width:600px){.back-to-top{right:16px;bottom:18px;width:44px;height:44px;font-size:23px}}
+@media(prefers-reduced-motion:reduce){.back-to-top{transition:none}}
