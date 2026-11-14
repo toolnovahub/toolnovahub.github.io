@@ -1,0 +1,31 @@
+/* ToolsNova shared footer — matches the homepage, scoped across all pages. */
+footer.tn-site-footer{
+  box-sizing:border-box;
+  width:100%;
+  max-width:1150px;
+  margin:0 auto;
+  padding:32px 24px 50px;
+  border-top:1px solid #27314a;
+  background:transparent;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;
+  justify-content:stretch;
+  gap:18px 28px;
+  color:#b9c7dd;
+  font-size:14px;
+  line-height:1.7;
+}
+.tn-site-footer .tn-footer-brand{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.tn-site-footer .tn-footer-brand strong{font-size:16px;font-weight:800;color:#e7e9fb;line-height:1.4}
+.tn-site-footer .tn-footer-brand small{font-size:14px;color:#c0cde2;line-height:1.6}
+.tn-site-footer .tn-footer-links{display:flex;align-items:center;justify-content:center;gap:12px 22px;flex-wrap:wrap}
+.tn-site-footer .tn-footer-links a{color:#c8d4e9;text-decoration:none;font-size:14px;white-space:nowrap}
+.tn-site-footer .tn-footer-links a:hover{color:#d1c4ff}
+.tn-site-footer .tn-footer-links a:focus-visible{outline:3px solid #d2c4ff;outline-offset:4px;border-radius:3px}
+.tn-site-footer .tn-footer-copyright{justify-self:end;white-space:nowrap;color:#b9c7dd;font-size:14px}
+@media(max-width:760px){
+  footer.tn-site-footer{grid-template-columns:minmax(0,1fr);justify-items:start;gap:15px;padding:28px 18px 36px}
+  .tn-site-footer .tn-footer-links{justify-content:flex-start;gap:10px 22px}
+  .tn-site-footer .tn-footer-copyright{justify-self:start}
+}
