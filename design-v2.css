@@ -120,3 +120,26 @@ body{background:radial-gradient(ellipse 65% 28% at 50% 3%,#30245d66,transparent 
 @media(max-width:940px){.tn-category-cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){.tn-category-section{padding:44px 18px 62px}.tn-category-intro{margin-bottom:24px}.tn-category-intro>p{font-size:15px}.tn-category-cards{grid-template-columns:1fr;gap:13px}.tn-category-card{padding:22px}.tn-category-card h3{margin-top:18px}}
 @media(prefers-reduced-motion:reduce){.tn-category-card{transition:none}.tn-category-card:hover{transform:none}}
+
+
+/* v2.6: readability polish — preserve ToolsNova dark/violet brand and layout. */
+body:not([data-tool-page]) .hero-kicker{font-size:12px;letter-spacing:.09em}
+body:not([data-tool-page]) .trust{font-size:14px;line-height:1.5}
+body:not([data-tool-page]) .v2-stat span{font-size:13px;line-height:1.5}
+body:not([data-tool-page]) .v2-demo-top{font-size:12px;line-height:1.5}
+body:not([data-tool-page]) .v2-demo-local{font-size:12px}
+body:not([data-tool-page]) .v2-demo-result small{font-size:12px;letter-spacing:.06em}
+body:not([data-tool-page]) .v2-demo-saving span{font-size:12px}
+body:not([data-tool-page]) .catalog .section-head .count span{font-size:12px;letter-spacing:.07em}
+body:not([data-tool-page]) .filter-tab{font-size:14px}
+body:not([data-tool-page]) .tool-search{font-size:16px}
+body:not([data-tool-page]) .tn-category-count{font-size:12px}
+body:not([data-tool-page]) .tool-card .card-link{font-size:14px}
+body:not([data-tool-page]) .home-footer{font-size:14px;color:#b2bfd7}
+body:not([data-tool-page]) .home-footer small{font-size:14px;color:#becae3}
+@media(max-width:600px){
+  body:not([data-tool-page]) .v2-stat span{font-size:12px}
+  body:not([data-tool-page]) .v2-demo-top{font-size:11px}
+  body:not([data-tool-page]) .v2-demo-local{font-size:11px}
+  body:not([data-tool-page]) .hero-kicker{font-size:12px;letter-spacing:.06em}
+}

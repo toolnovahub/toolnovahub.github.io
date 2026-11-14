@@ -26,3 +26,11 @@ body:not([data-tool-page]) .nav-categories summary{font-size:12px}
 body:not([data-tool-page]) .nav-categories-menu{min-width:170px}
 }
 @media(max-width:520px){body:not([data-tool-page]) .topbar nav .nav-categories-menu a:first-child{display:block!important}}
+
+
+/* v1.1: increase small-screen navigation legibility without changing layout. */
+@media(max-width:700px){
+  body:not([data-tool-page]) .topbar nav{font-size:14px;line-height:1.45}
+  body:not([data-tool-page]) .nav-categories summary{font-size:14px}
+  body:not([data-tool-page]) .topbar nav .nav-categories-menu a{font-size:14px!important}
+}
