@@ -1,0 +1,25 @@
+/* Shared navigation for individual tool pages. Desktop matches the ToolsNova
+   main menu; at <=900px it preserves the previous All tools / About links. */
+.topbar nav.tool-page-top-nav > .tool-nav-mobile-all{display:none}
+.topbar nav.tool-page-top-nav > .nav-categories{position:relative;flex:none}
+.topbar nav.tool-page-top-nav > .nav-categories summary{display:inline-flex;align-items:center;gap:5px;min-height:38px;color:#b8c1db;font:inherit;cursor:pointer;white-space:nowrap;list-style:none}
+.topbar nav.tool-page-top-nav > .nav-categories summary::-webkit-details-marker{display:none}
+.topbar nav.tool-page-top-nav > .nav-categories summary::marker{content:""}
+.topbar nav.tool-page-top-nav > .nav-categories summary:hover,.topbar nav.tool-page-top-nav > .nav-categories[open] summary{color:#fff}
+.topbar nav.tool-page-top-nav > .nav-categories summary:focus-visible{outline:3px solid #d2c4ff;outline-offset:3px;border-radius:5px}
+.topbar nav.tool-page-top-nav .nav-categories-menu{position:absolute;left:0;top:calc(100% + 7px);z-index:100;min-width:190px;padding:7px;background:#151e34;border:1px solid #5b4e81;border-radius:12px;box-shadow:0 18px 45px #0009}
+.topbar nav.tool-page-top-nav .nav-categories-menu a{display:block;min-height:0;padding:10px 12px;color:#e4ddff;font-size:13px;text-decoration:none;border:0;border-radius:8px;background:transparent;white-space:nowrap}
+.topbar nav.tool-page-top-nav .nav-categories-menu a:hover,.topbar nav.tool-page-top-nav .nav-categories-menu a:focus-visible{background:#332952;color:#fff}
+.topbar nav.tool-page-top-nav .nav-categories-menu a.nav-all-tools{margin-bottom:8px;box-shadow:0 1px 0 #424767}
+.topbar nav.tool-page-top-nav > .nav-projects .nav-projects-short{display:none}
+.topbar nav.tool-page-top-nav > a:last-child{border:0!important;border-radius:0!important;padding:0!important;background:none!important;color:#b8c1db!important}
+.topbar nav.tool-page-top-nav > a:last-child:hover{color:#fff!important}
+.topbar nav.tool-page-top-nav > a:focus-visible{outline:3px solid #d2c4ff;outline-offset:3px;border-radius:4px}
+@media(min-width:901px) and (max-width:1040px){.topbar nav.tool-page-top-nav{gap:17px}}
+@media(max-width:900px){
+ .topbar nav.tool-page-top-nav > .tool-nav-home,
+ .topbar nav.tool-page-top-nav > .nav-categories,
+ .topbar nav.tool-page-top-nav > .nav-projects,
+ .topbar nav.tool-page-top-nav > .tool-nav-guides{display:none!important}
+ .topbar nav.tool-page-top-nav > .tool-nav-mobile-all{display:inline-flex;align-items:center}
+}
