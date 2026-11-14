@@ -257,8 +257,8 @@ document.querySelectorAll('button[data-tool]').forEach(b=>b.onclick=()=>{const d
 if(document.body.dataset.toolPage)open(document.body.dataset.toolPage);
 
 function setupToolDiscovery(){
- const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),count=$('#visible-count'),more=$('#show-all-tools'),categories=[...document.querySelectorAll('[data-category-jump]')];
- if(!search||!tabs.length||!empty||!count||!more)return;
+ const search=$('#tool-search'),tabs=[...document.querySelectorAll('.filter-tab')],cards=[...document.querySelectorAll('.tool-card')],empty=$('#empty-results'),more=$('#show-all-tools'),categories=[...document.querySelectorAll('[data-category-jump]')];
+ if(!search||!tabs.length||!empty||!more)return;
  let category='all',expanded=false;
  const featured=new Set(['compress','convert','password','qr','words','json','splitpdf','mergepdf','pdftojpg']);
  function filter(){
@@ -270,7 +270,6 @@ function setupToolDiscovery(){
    const show=match&&(showEverything||featured.has(card.dataset.tool));
    card.hidden=!show;if(show)visible++;
   }
-  count.textContent=showEverything?visible+' of '+cards.length+' tools':visible+' featured tools · '+cards.length+' total';
   empty.hidden=matched!==0;
   more.hidden=category!=='all'||query.length>0;
   more.textContent=expanded?'Show fewer tools':'View all '+cards.length+' tools';
