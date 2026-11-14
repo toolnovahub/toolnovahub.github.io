@@ -340,3 +340,20 @@
 .tool-page .tn-faq-item .tn-faq-answer{padding:0 22px 20px;color:#c0cde5;font-size:15px;line-height:1.75}
 .tool-page .tn-faq-item .tn-faq-answer p{margin:0}
 @media(max-width:650px){.tool-page .tn-tool-faq{margin-top:42px}.tool-page .tn-faq-item summary{padding:17px 15px;font-size:15px}.tool-page .tn-faq-item .tn-faq-answer{padding:0 15px 17px;font-size:14px}}
+
+/* Privacy Policy icons: match the illustrated preview, retain full legal copy. */
+.tool-page .tn-privacy-policy .tn-privacy-card h2{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
+.tool-page .tn-privacy-policy .tn-privacy-icon{
+  flex:0 0 21px;
+  width:21px;
+  height:21px;
+  color:#b9a8ff;
+}
+@media(max-width:650px){
+  .tool-page .tn-privacy-policy .tn-privacy-card h2{gap:9px}
+  .tool-page .tn-privacy-policy .tn-privacy-icon{flex-basis:19px;width:19px;height:19px}
+}
