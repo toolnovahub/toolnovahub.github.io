@@ -1,0 +1,28 @@
+/* Shared header navigation for public informational pages. */
+body:not([data-tool-page]) .topbar{position:relative;z-index:90;max-width:1200px;min-height:78px;height:auto;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 24px;margin:0 auto;border-bottom:1px solid #ffffff12}
+body:not([data-tool-page]) .topbar nav{display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:clamp(12px,2vw,26px);color:#b8c1db;font-size:14px}
+body:not([data-tool-page]) .topbar nav>a{white-space:nowrap}
+body:not([data-tool-page]) .topbar nav>a:last-child{border:0!important;padding:0!important;border-radius:0!important;background:none!important;color:#b8c1db!important}
+body:not([data-tool-page]) .topbar nav>a:last-child:hover{color:#fff!important}
+body:not([data-tool-page]) .topbar nav>a[aria-current="page"]{color:#dbccff}
+body:not([data-tool-page]) .nav-categories{position:relative;flex:none}
+body:not([data-tool-page]) .nav-categories summary{display:inline-flex;align-items:center;gap:5px;min-height:38px;color:#b8c1db;font:inherit;cursor:pointer;white-space:nowrap;list-style:none}
+body:not([data-tool-page]) .nav-categories summary::-webkit-details-marker{display:none}
+body:not([data-tool-page]) .nav-categories summary::marker{content:""}
+body:not([data-tool-page]) .nav-categories[open] summary,body:not([data-tool-page]) .nav-categories summary:hover{color:#fff}
+body:not([data-tool-page]) .nav-categories summary:focus-visible{outline:3px solid #d2c4ff;outline-offset:3px;border-radius:5px}
+body:not([data-tool-page]) .nav-categories-menu{position:absolute;left:0;top:calc(100% + 7px);z-index:100;min-width:190px;padding:7px;background:#151e34;border:1px solid #5b4e81;border-radius:12px;box-shadow:0 18px 45px #0009}
+body:not([data-tool-page]) .topbar nav .nav-categories-menu a{display:block!important;min-height:0!important;padding:10px 12px!important;margin:0!important;color:#e4ddff!important;font-size:13px;text-decoration:none;border:0!important;border-radius:8px!important;background:transparent!important;white-space:nowrap}
+body:not([data-tool-page]) .topbar nav .nav-categories-menu a.nav-all-tools{margin-bottom:8px!important;box-shadow:0 1px 0 #424767}
+body:not([data-tool-page]) .topbar nav .nav-categories-menu a:hover,body:not([data-tool-page]) .topbar nav .nav-categories-menu a:focus-visible,body:not([data-tool-page]) .topbar nav .nav-categories-menu a[aria-current="page"]{background:#332952!important;color:#fff!important}
+body:not([data-tool-page]) .nav-projects-short{display:none}
+@media(max-width:700px){
+body:not([data-tool-page]) .topbar{height:auto!important;min-height:78px;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:6px;padding:13px 16px 17px}
+body:not([data-tool-page]) .topbar nav{width:100%;display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;column-gap:15px;row-gap:10px;font-size:12px}
+body:not([data-tool-page]) .topbar nav>a{display:inline-flex;align-items:center;min-height:38px}
+body:not([data-tool-page]) .nav-projects-full{display:none}
+body:not([data-tool-page]) .nav-projects-short{display:inline}
+body:not([data-tool-page]) .nav-categories summary{font-size:12px}
+body:not([data-tool-page]) .nav-categories-menu{min-width:170px}
+}
+@media(max-width:520px){body:not([data-tool-page]) .topbar nav .nav-categories-menu a:first-child{display:block!important}}
