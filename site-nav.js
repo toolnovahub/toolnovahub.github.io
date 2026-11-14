@@ -43,3 +43,6 @@ const script=document.createElement("script");script.src="/tool-help.js?v=1";scr
 
 /* Remove the redundant "View all tools" shortcut from the Related tools heading. */
 (()=>{if(!/^\/tools\/[^/]+\/?$/.test(location.pathname))return;const head=document.querySelector(".related-tools .related-head");if(!head)return;for(const link of head.querySelectorAll('a[href="/#tools"]')){if(link.textContent.trim().toLowerCase().startsWith("view all tools"))link.remove()}})();
+
+/* Mobile tool search and privacy-control placement, shared by all site pages. */
+(()=>{if(document.querySelector('link[href^="/mobile-ux.css"]'))return;const sheet=document.createElement("link");sheet.rel="stylesheet";sheet.href="/mobile-ux.css?v=1";document.head.appendChild(sheet)})();
