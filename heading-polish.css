@@ -144,3 +144,15 @@
     gap:8px;
   }
 }
+
+/* Keep the decorative dot exclusively in the homepage hero badge. */
+.eyebrow:not(.hero-kicker)::before,
+.pdf-head .pdf-label::before,
+.image-head .image-label::before,
+.text-head .text-label::before,
+.developer-head .developer-label::before,
+.security-head .security-label::before,
+.guide-intro>.guide-kicker::before{
+  content:none;
+  display:none;
+}
