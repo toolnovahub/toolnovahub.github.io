@@ -1,0 +1,50 @@
+name: Branch QA validation (no deploy)
+on:
+  push:
+    branches:
+      - seo/priority-1-static-guides-about-20261115
+    paths:
+      - .github/workflows/branch-qa-no-deploy.yml
+      - .github/qa/**
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser automation and Lighthouse (no repo dependency changes)
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.56.1 lighthouse@12.8.2
+      - name: Start local-only preview server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/toolsnova-qa-http.log 2>&1 &
+          echo $! > /tmp/toolsnova-qa-http.pid
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8765/ > /dev/null
+      - name: Run functional, keyboard, mobile, metadata and link tests
+        run: node .github/qa/validate.mjs
+      - name: Run Lighthouse on 3 local branch pages
+        if: always()
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          if [ -z "$CHROME_PATH" ]; then echo "::error::No Chrome found"; exit 1; fi
+          mkdir -p qa-lighthouse
+          for target in 'homepage:/' 'password:/tools/password-generator/' 'json:/tools/json-formatter/'; do
+            name="${target%%:*}"
+            path="${target#*:}"
+            ./node_modules/.bin/lighthouse "http://127.0.0.1:8765$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="qa-lighthouse/$name.json" || exit 1
+            node -e 'const r=require("./qa-lighthouse/"+process.argv[1]+".json");const x=Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)]));console.log("LIGHTHOUSE "+process.argv[1]+" "+JSON.stringify({scores:x,LCP:r.audits["largest-contentful-paint"]?.displayValue,CLS:r.audits["cumulative-layout-shift"]?.displayValue}))' "$name"
+          done
+      - name: Store QA evidence (no deployment)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toolsnova-branch-qa-results
+          path: |
+            qa-lighthouse/*.json
+            /tmp/toolsnova-qa-http.log
+          if-no-files-found: ignore
