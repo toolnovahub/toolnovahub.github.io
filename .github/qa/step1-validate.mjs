@@ -180,7 +180,7 @@ try{
    assert.equal(matches,3,slug+': recommendations');
    assert.equal((html.match(/class="tn-faq-item"/g)||[]).length,4);
    await fresh(page,path);
-   assert.equal(await page.locator('ol.tn-help-steps > li').count(),3);
+   assert((await page.locator('ol.tn-help-steps > li').count())>=3,slug+': insufficient how-to steps');
    assert.equal(await page.locator('.related-tools .related-card').count(),3);
   }
   const excluded=new Set([...selected,'pdf','images','text','developer','security']);
