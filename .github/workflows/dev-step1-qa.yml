@@ -1,0 +1,77 @@
+name: Step 1 incremental QA (no deploy)
+on:
+  push:
+    branches:
+      - dev/seo-step1-five-tools-20261115
+    paths:
+      - .github/workflows/dev-step1-qa.yml
+      - .github/qa/**
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser automation and Lighthouse (no repo dependency changes)
+        run: npm install --no-save --no-package-lock --ignore-scripts playwright-core@1.56.1 lighthouse@12.8.2
+      - name: Start local-only preview server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 > /tmp/toolsnova-qa-http.log 2>&1 &
+          echo $! > /tmp/toolsnova-qa-http.pid
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8765/ > /dev/null
+      - name: Run functional, keyboard, mobile, metadata and link tests
+        run: node .github/qa/step1-validate.mjs
+      - name: Run Lighthouse on 3 local branch pages
+        if: always()
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          if [ -z "$CHROME_PATH" ]; then echo "::error::No Chrome found"; exit 1; fi
+          mkdir -p qa-lighthouse
+          for target in 'homepage:/' 'password:/tools/password-generator/' 'json:/tools/json-formatter/'; do
+            name="${target%%:*}"
+            path="${target#*:}"
+            ./node_modules/.bin/lighthouse "http://127.0.0.1:8765$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="qa-lighthouse/$name.json" || exit 1
+            node -e 'const r=require("./qa-lighthouse/"+process.argv[1]+".json");const x=Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)]));console.log("LIGHTHOUSE "+process.argv[1]+" "+JSON.stringify({scores:x,LCP:r.audits["largest-contentful-paint"]?.displayValue,CLS:r.audits["cumulative-layout-shift"]?.displayValue}))' "$name"
+          done
+      - name: Compare Lighthouse with current main in identical runner
+        if: always()
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          git fetch --no-tags --depth=1 origin refs/heads/main
+          git worktree add --detach /tmp/toolsnova-main FETCH_HEAD
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory /tmp/toolsnova-main > /tmp/toolsnova-main-http.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8766/ > /dev/null
+          mkdir -p qa-lighthouse-main
+          for target in 'homepage:/' 'password:/tools/password-generator/' 'json:/tools/json-formatter/'; do
+            name="${target%%:*}"
+            path="${target#*:}"
+            ./node_modules/.bin/lighthouse "http://127.0.0.1:8766$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="qa-lighthouse-main/$name.json" || exit 1
+            node -e 'const r=require("./qa-lighthouse-main/"+process.argv[1]+".json");const x=Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)]));console.log("MAIN BASELINE LIGHTHOUSE "+process.argv[1]+" "+JSON.stringify({scores:x,LCP:r.audits["largest-contentful-paint"]?.displayValue,CLS:r.audits["cumulative-layout-shift"]?.displayValue}))' "$name"
+          done
+      - name: Create full review diff, including binary OG image
+        if: always()
+        run: |
+          git fetch --no-tags --depth=1 origin main
+          mkdir -p qa-diff
+          git diff --binary --full-index origin/main HEAD -- . ':!.github/workflows/dev-step1-qa.yml' ':!.github/qa/step1-validate.mjs' > qa-diff/STEP1-FULL-DIFF.patch
+          git diff --name-status origin/main HEAD -- . ':!.github/workflows/dev-step1-qa.yml' ':!.github/qa/step1-validate.mjs' > qa-diff/FILES.txt
+          wc -c qa-diff/STEP1-FULL-DIFF.patch
+      - name: Store QA evidence (no deployment)
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: toolsnova-branch-qa-results
+          path: |
+            qa-lighthouse/*.json
+            qa-lighthouse-main/*.json
+            qa-screens/*.png
+            qa-diff/*
+            /tmp/toolsnova-qa-http.log
+          if-no-files-found: ignore
