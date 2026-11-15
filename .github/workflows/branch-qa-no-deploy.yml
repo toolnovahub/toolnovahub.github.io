@@ -6,6 +6,7 @@ on:
     paths:
       - .github/workflows/branch-qa-no-deploy.yml
       - .github/qa/**
+      - tools/password-generator/index.html
 permissions:
   contents: read
 jobs:
@@ -27,8 +28,6 @@ jobs:
           curl --fail --silent http://127.0.0.1:8765/ > /dev/null
       - name: Run functional, keyboard, mobile, metadata and link tests
         run: node .github/qa/validate.mjs
-      - name: Investigate layout shift sources (branch only)
-        run: node .github/qa/cls-diagnose.mjs
       - name: Run Lighthouse on 3 local branch pages
         if: always()
         run: |
