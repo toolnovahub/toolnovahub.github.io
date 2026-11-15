@@ -27,6 +27,8 @@ jobs:
           curl --fail --silent http://127.0.0.1:8765/ > /dev/null
       - name: Run functional, keyboard, mobile, metadata and link tests
         run: node .github/qa/validate.mjs
+      - name: Investigate layout shift sources (branch only)
+        run: node .github/qa/cls-diagnose.mjs
       - name: Run Lighthouse on 3 local branch pages
         if: always()
         run: |
@@ -64,5 +66,6 @@ jobs:
             qa-lighthouse/*.json
             qa-lighthouse-main/*.json
             qa-screens/*.png
+            qa-diagnostics/*.json
             /tmp/toolsnova-qa-http.log
           if-no-files-found: ignore
