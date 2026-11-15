@@ -83,6 +83,7 @@ try{
   await page.locator('#page-info').getByText(/PDF loaded/).waitFor({timeout:15000}).catch(async()=>{assert((await page.locator('#page-info').innerText()).includes('PDF loaded'))});
   await page.locator('#page-ranges').fill('5');
   await page.locator('#split-btn').click();
+  await page.waitForFunction(()=>document.getElementById('status')?.textContent?.includes('Could not split'),null,{timeout:10000});
   assert((await page.locator('#status').innerText()).includes('Could not split'));
   await page.locator('#page-ranges').fill('1,3');
   const dl=await awaitDownload(page,()=>page.locator('#split-btn').click());
@@ -128,7 +129,8 @@ try{
   }
  });
  await check('SEO: all 30 tool pages + homepage + About canonical, description, schema',async()=>{
-  for(const path of ['/','/about/',...readFileSync('sitemap.xml','utf8').matchAll(/<loc>https:\/\/toolsnova\.online(\/tools\/[^<]+\/)<\/loc>/g)].map(x=>x[1]))metadata(path);
+  const paths=[...readFileSync('sitemap.xml','utf8').matchAll(/<loc>https:\/\/toolsnova\.online(\/tools\/[^<]+\/)<\/loc>/g)].map(x=>x[1]);
+  for(const path of ['/', '/about/', ...paths])metadata(path);
  });
  await check('SEO: sitemap and robots, link integrity',async()=>{
   const xml=readFileSync('sitemap.xml','utf8');

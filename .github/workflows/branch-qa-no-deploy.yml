@@ -39,6 +39,22 @@ jobs:
             ./node_modules/.bin/lighthouse "http://127.0.0.1:8765$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="qa-lighthouse/$name.json" || exit 1
             node -e 'const r=require("./qa-lighthouse/"+process.argv[1]+".json");const x=Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)]));console.log("LIGHTHOUSE "+process.argv[1]+" "+JSON.stringify({scores:x,LCP:r.audits["largest-contentful-paint"]?.displayValue,CLS:r.audits["cumulative-layout-shift"]?.displayValue}))' "$name"
           done
+      - name: Compare Lighthouse with current main in identical runner
+        if: always()
+        run: |
+          export CHROME_PATH="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          git fetch --no-tags --depth=1 origin refs/heads/main
+          git worktree add --detach /tmp/toolsnova-main FETCH_HEAD
+          python3 -m http.server 8766 --bind 127.0.0.1 --directory /tmp/toolsnova-main > /tmp/toolsnova-main-http.log 2>&1 &
+          sleep 2
+          curl --fail --silent http://127.0.0.1:8766/ > /dev/null
+          mkdir -p qa-lighthouse-main
+          for target in 'homepage:/' 'password:/tools/password-generator/' 'json:/tools/json-formatter/'; do
+            name="${target%%:*}"
+            path="${target#*:}"
+            ./node_modules/.bin/lighthouse "http://127.0.0.1:8766$path" --chrome-flags="--headless --no-sandbox --disable-dev-shm-usage" --quiet --only-categories=performance,accessibility,best-practices,seo --output=json --output-path="qa-lighthouse-main/$name.json" || exit 1
+            node -e 'const r=require("./qa-lighthouse-main/"+process.argv[1]+".json");const x=Object.fromEntries(Object.entries(r.categories).map(([k,v])=>[k,Math.round(v.score*100)]));console.log("MAIN BASELINE LIGHTHOUSE "+process.argv[1]+" "+JSON.stringify({scores:x,LCP:r.audits["largest-contentful-paint"]?.displayValue,CLS:r.audits["cumulative-layout-shift"]?.displayValue}))' "$name"
+          done
       - name: Store QA evidence (no deployment)
         uses: actions/upload-artifact@v4
         if: always()
@@ -46,5 +62,6 @@ jobs:
           name: toolsnova-branch-qa-results
           path: |
             qa-lighthouse/*.json
+            qa-lighthouse-main/*.json
             /tmp/toolsnova-qa-http.log
           if-no-files-found: ignore
