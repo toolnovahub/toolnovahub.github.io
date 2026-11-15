@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFileSync, existsSync} from 'node:fs';
+import {readFileSync, existsSync, mkdirSync} from 'node:fs';
 import {resolve, join} from 'node:path';
 import {createRequire} from 'node:module';
 import {chromium} from 'playwright-core';
@@ -49,6 +49,9 @@ try{
  await check('homepage: keyboard Enter follows real link',async()=>{
   const card=page.locator('.tool-card[href="/tools/password-generator/"]');
   await card.focus();assert(await card.evaluate(e=>document.activeElement===e));
+  await page.locator('#tool-search').focus();await page.keyboard.press('Tab');
+  assert(await page.locator('.filter-tab').first().evaluate(el=>document.activeElement===el),'Tab did not focus first category button');
+  await card.focus();
   await page.keyboard.press('Enter');await page.waitForURL('**/tools/password-generator/');
   assert(await page.locator('h1').first().isVisible());
  });
@@ -57,7 +60,9 @@ try{
   const out=page.locator('#result');assert.equal((await out.textContent()).length,20);
   await page.locator('#length').evaluate(el=>{el.value='16';el.dispatchEvent(new Event('input',{bubbles:true}))});
   await page.locator('#generate').click();assert.equal((await out.textContent()).length,16);
-  await page.locator('#copy').click();assert((await page.locator('#status').innerText()).length>0);
+  await page.locator('#copy').click();
+  assert((await page.locator('#status').innerText()).includes('Copied'));
+  assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),await out.textContent());
  });
  await check('JSON Formatter: valid formatting, minify, invalid error',async()=>{
   await fresh(page,'/tools/json-formatter/');
@@ -75,6 +80,7 @@ try{
    {name:'second.pdf',mimeType:'application/pdf',buffer:await pdfBytes(2)}]);
   const download=await awaitDownload(page,()=>page.locator('#pdf-merge').click());
   assert.equal(download.suggestedFilename(),'merged.pdf');
+  assert.equal((await PDFDocument.load(readFileSync(await download.path()))).getPageCount(),3);
   assert((await page.locator('#status').innerText()).includes('3 pages merged'));
  });
  await check('Split PDF: invalid range, then 2-page download',async()=>{
@@ -88,6 +94,7 @@ try{
   await page.locator('#page-ranges').fill('1,3');
   const dl=await awaitDownload(page,()=>page.locator('#split-btn').click());
   assert(dl.suggestedFilename().includes('selected-pages.pdf'));
+  assert.equal((await PDFDocument.load(readFileSync(await dl.path()))).getPageCount(),2);
   assert((await page.locator('#status').innerText()).includes('Extracted 2'));
  });
  await check('Compress PDF: validates missing input and handles valid PDF',async()=>{
@@ -115,6 +122,7 @@ try{
   await page.locator('#clear').click();assert.equal(await page.locator('#wc').innerText(),'0');
  });
  await check('mobile: new sections, FAQ, related tools, About, no overflow',async()=>{
+  mkdirSync('qa-screens',{recursive:true});
   await page.setViewportSize({width:390,height:844});
   for(const path of ['/tools/password-generator/','/tools/json-formatter/','/tools/merge-pdf/','/about/']){
    await fresh(page,path);
@@ -126,7 +134,14 @@ try{
     assert.equal(await page.locator('.related-grid a.related-card').count(),3);
     const faq=page.locator('.tn-tool-faq details').first();await faq.locator('summary').click();assert(await faq.evaluate(e=>e.open));
    }
+   const shotName=path==='/'?'home':path.replace(/^\/+|\/+$/g,'').replaceAll('/','-');
+   await page.screenshot({path:'qa-screens/mobile-'+shotName+'.png',fullPage:true});
   }
+ });
+ await check('desktop screenshot capture',async()=>{
+  await page.setViewportSize({width:1365,height:850});
+  await fresh(page,'/');
+  await page.screenshot({path:'qa-screens/desktop-homepage.png',fullPage:true});
  });
  await check('SEO: all 30 tool pages + homepage + About canonical, description, schema',async()=>{
   const paths=[...readFileSync('sitemap.xml','utf8').matchAll(/<loc>https:\/\/toolsnova\.online(\/tools\/[^<]+\/)<\/loc>/g)].map(x=>x[1]);

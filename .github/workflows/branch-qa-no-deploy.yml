@@ -63,5 +63,6 @@ jobs:
           path: |
             qa-lighthouse/*.json
             qa-lighthouse-main/*.json
+            qa-screens/*.png
             /tmp/toolsnova-qa-http.log
           if-no-files-found: ignore
