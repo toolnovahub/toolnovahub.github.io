@@ -61,7 +61,7 @@ try{
   await page.locator('#length').evaluate(el=>{el.value='16';el.dispatchEvent(new Event('input',{bubbles:true}))});
   await page.locator('#generate').click();assert.equal((await out.textContent()).length,16);
   await page.locator('#copy').click();
-  assert((await page.locator('#status').innerText()).includes('Copied'));
+  await page.locator('#status').filter({hasText:'Copied'}).waitFor({state:'visible',timeout:5000});
   assert.equal(await page.evaluate(()=>navigator.clipboard.readText()),await out.textContent());
  });
  await check('JSON Formatter: valid formatting, minify, invalid error',async()=>{
