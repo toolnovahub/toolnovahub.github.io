@@ -1,0 +1,14 @@
+/* About ToolsNova: restrained dark/violet styling, based on existing site colors. */
+.tn-about{max-width:1040px;margin:0 auto;padding:24px 24px 88px;color:#eaf0ff}
+.tn-about-breadcrumb{display:flex;gap:12px;align-items:center;margin:8px 0 35px;color:#aebdd7;font-size:.875rem}
+.tn-about-breadcrumb a{color:#d7c6ff;text-decoration:underline;text-underline-offset:3px}
+.tn-about-hero{max-width:810px;margin:0 0 34px}
+.tn-about-hero h1{margin:12px 0 16px;font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.13;letter-spacing:-.03em}
+.tn-about-hero p{font-size:1.13rem;line-height:1.75;color:#c9d4eb}
+.tn-about-card{padding:clamp(20px,3.2vw,32px);margin-bottom:18px;border:1px solid #35415f;border-radius:18px;background:linear-gradient(145deg,#172139,#111a2c)}
+.tn-about-card h2{margin:0 0 14px;color:#f3f2ff;font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.32}
+.tn-about-card p{max-width:84ch;color:#cad5e8;line-height:1.78;margin:0 0 15px}
+.tn-about-card p:last-child{margin-bottom:0}
+.tn-about-card a{color:#d2c1ff;text-decoration:underline;text-underline-offset:3px}
+.tn-about a:focus-visible{outline:3px solid #d2c4ff;outline-offset:4px;border-radius:3px}
+@media(max-width:600px){.tn-about{padding:20px 17px 66px}.tn-about-hero{margin-bottom:25px}.tn-about-card{border-radius:15px;margin-bottom:15px}}
