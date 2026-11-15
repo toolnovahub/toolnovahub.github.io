@@ -1,0 +1,68 @@
+name: Prepare OG image on development branch only
+on:
+  push:
+    branches:
+      - dev/seo-step1-five-tools-20261115
+    paths:
+      - .github/workflows/create-social-card-dev.yml
+permissions:
+  contents: write
+jobs:
+  create-social-card:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Create 1200x630 ToolsNova JPEG social card
+        run: |
+          python -m pip install --quiet pillow
+          python - <<'PY'
+          from PIL import Image, ImageDraw, ImageFont, ImageFilter
+          import math, os
+          W,H=1200,630
+          im=Image.new('RGB',(W,H))
+          pix=im.load()
+          for y in range(H):
+              for x in range(W):
+                  dx=(x-970)/750;dy=(y-90)/570
+                  glow=max(0,1-math.sqrt(dx*dx+dy*dy))*0.8
+                  lower=max(0,1-abs(y-620)/320)*0.14
+                  pix[x,y]=(int(10+glow*53+lower*20),int(12+glow*20),int(32+glow*86+lower*52))
+          overlay=Image.new('RGBA',(W,H),(0,0,0,0))
+          d=ImageDraw.Draw(overlay)
+          d.ellipse((-180,435,450,1050),outline=(145,75,246,170),width=5)
+          d.ellipse((820,-340,1520,270),outline=(165,90,255,185),width=5)
+          for px,py in [(70,80),(90,120),(110,80),(1150,520),(1100,550),(1050,520)]:
+              d.ellipse((px,py,px+4,py+4),fill=(170,114,255,110))
+          d.rounded_rectangle((69,86,188,205),radius=28,fill=(72,37,136,245),outline=(171,106,255,255),width=3)
+          fBold='/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
+          fRegular='/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'
+          title=ImageFont.truetype(fBold,82)
+          big=ImageFont.truetype(fBold,45)
+          small=ImageFont.truetype(fRegular,28)
+          minor=ImageFont.truetype(fBold,21)
+          d.text((98,98),'T',font=ImageFont.truetype(fBold,72),fill=(255,255,255,255))
+          d.text((218,103),'Tools',font=title,fill=(255,255,255,255))
+          d.text((468,103),'Nova',font=title,fill=(171,105,255,255))
+          d.rounded_rectangle((72,260,760,355),radius=30,fill=(98,38,185,236),outline=(192,137,255,255),width=3)
+          d.text((112,273),'30 FREE ONLINE TOOLS',font=big,fill='white')
+          d.text((81,387),'PDF  •  IMAGES  •  TEXT  •  DEVELOPERS',font=small,fill=(232,225,250,255))
+          def pill(x,label):
+              d.rounded_rectangle((x,477,x+290,554),radius=17,fill=(25,32,66,242),outline=(112,76,169,255),width=2)
+              d.text((x+24,497),label,font=minor,fill=(235,225,255,255))
+          pill(76,'FREE TO USE');pill(378,'PRIVATE BY DESIGN');pill(680,'BROWSER-BASED')
+          im=Image.alpha_composite(im.convert('RGBA'),overlay).convert('RGB')
+          os.makedirs('assets',exist_ok=True)
+          im.save('assets/toolsnova-social.jpg',quality=84,optimize=True,progressive=True)
+          print('Created assets/toolsnova-social.jpg:',os.stat('assets/toolsnova-social.jpg').st_size,'bytes',im.size)
+          PY
+      - name: Commit image only to development branch (never main)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          test "$(git branch --show-current)" = "dev/seo-step1-five-tools-20261115"
+          git add -- assets/toolsnova-social.jpg
+          git commit -m "Add ToolsNova 1200x630 social preview image"
+          git push origin HEAD:refs/heads/dev/seo-step1-five-tools-20261115

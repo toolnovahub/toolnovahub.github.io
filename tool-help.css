@@ -19,3 +19,12 @@
 .tool-explainer .tn-help-case p{margin:0;color:#c6c9df;font-size:.94rem;line-height:1.6}
 .tool-explainer .tool-privacy{margin-top:0;margin-bottom:22px}
 @media(max-width:600px){.tool-explainer{padding:19px 15px 2px;border-radius:14px}.tool-explainer .tn-help-block{padding:17px 16px}.tool-explainer .tn-help-steps{gap:14px}.tool-explainer .tn-help-cases-grid{grid-template-columns:1fr}}
+
+/* Static editorial guidance, preserving the current dark/violet layout. */
+.tool-explainer .tn-static-intro{max-width:78ch;margin:0 0 20px;color:#d3ddf1;line-height:1.7}
+.tool-explainer .tn-help-block>p{color:#d6dff0;line-height:1.7;margin:0 0 15px}
+.tool-explainer .tn-help-block>p:last-child{margin-bottom:0}
+.tool-explainer .tn-static-example{padding:13px 16px;border-left:3px solid #a78bfa;background:#1d2741;border-radius:7px}
+.tool-explainer .tn-editorial-guide{margin:0 0 20px;line-height:1.65;color:#cbd6eb}
+.tool-explainer .tn-editorial-guide a{color:#d9c8ff;text-decoration:underline;text-underline-offset:3px}
+.tool-explainer .tn-editorial-guide a:focus-visible{outline:3px solid #e5dfff;outline-offset:3px}

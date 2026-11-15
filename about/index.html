@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="robots" content="index, follow">
+  <title>About ToolsNova — Free Browser-Based Utilities</title>
+  <meta name="description" content="Learn who maintains ToolsNova, how browser-based processing works, which technologies power the tools, how to report problems, and how privacy is handled.">
+  <link rel="canonical" href="https://toolsnova.online/about/">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="About ToolsNova — Free Browser-Based Utilities">
+  <meta property="og:description" content="An independent collection of free browser-based PDF, image, text and developer utilities. Learn about its technology and privacy approach.">
+  <meta property="og:url" content="https://toolsnova.online/about/">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"AboutPage","name":"About ToolsNova","url":"https://toolsnova.online/about/","about":{"@type":"WebSite","name":"ToolsNova","url":"https://toolsnova.online/"},"inLanguage":"en"}</script>
+  <link rel="stylesheet" href="/style.css?v=2.5.1">
+  <link rel="stylesheet" href="/site-nav.css?v=1">
+  <link rel="stylesheet" href="/site-footer.css?v=2">
+  <link rel="stylesheet" href="/analytics.css?v=1">
+  <link rel="stylesheet" href="/about/about.css?v=1">
+<meta property="og:image" content="https://toolsnova.online/assets/toolsnova-social.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="ToolsNova — 30 Free Online Tools"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="About ToolsNova — Free Browser-Based Utilities"><meta name="twitter:description" content="Learn who maintains ToolsNova, how browser-based processing works, which technologies power the tools, how to report problems, and how privacy is handled."><meta name="twitter:image" content="https://toolsnova.online/assets/toolsnova-social.jpg"></head>
+<body>
+<header class="topbar">
+  <a class="brand" href="/"><span class="brandmark" aria-hidden="true"><img src="/toolsnova-tools.svg" width="24" height="24" alt=""></span> Tools<span>Nova</span></a>
+  <nav aria-label="Main navigation">
+    <a class="nav-home" href="/">Home</a>
+    <details class="nav-categories"><summary>Tools <span aria-hidden="true">⌄</span></summary>
+      <div class="nav-categories-menu"><a class="nav-all-tools" href="/#tools">All Tools</a><a href="/tools/pdf/">PDF Tools</a><a href="/tools/images/">Image Tools</a><a href="/tools/text/">Text Tools</a><a href="/tools/developer/">Developer Tools</a><a href="/tools/security/">Security Tools</a></div>
+    </details>
+    <a href="/projects/" class="nav-projects"><span class="nav-projects-full">Our Projects</span><span class="nav-projects-short">Projects</span></a>
+    <a href="/guides/">Guides</a>
+    <a href="/about/" aria-current="page">About</a>
+  </nav>
+</header>
+<main class="tn-about">
+  <nav class="tn-about-breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span aria-current="page">About</span></nav>
+  <header class="tn-about-hero"><div class="eyebrow">ABOUT THE PROJECT</div><h1>About ToolsNova</h1><p>ToolsNova is a collection of free, browser-based utilities for everyday tasks involving PDFs, images, text and developer data. The aim is simple: useful tools without unnecessary registration or uploads.</p></header>
+  <section class="tn-about-card" aria-labelledby="who"><h2 id="who">Who builds and maintains ToolsNova?</h2>
+    <p>ToolsNova is an independent web project developed and maintained under the <a href="https://github.com/toolnovahub" rel="noopener noreferrer">ToolNovaHub GitHub account</a>. The project is not presented as an accredited security laboratory or a large software company.</p>
+    <p>The source repository and project history are available at <a href="https://github.com/toolnovahub/toolnovahub.github.io" rel="noopener noreferrer">GitHub: toolnovahub/toolnovahub.github.io</a>. You can inspect the project and report issues there.</p></section>
+  <section class="tn-about-card" aria-labelledby="local"><h2 id="local">How does local processing work?</h2>
+    <p>The browser downloads the site's HTML, CSS, JavaScript and libraries. For supported file and text utilities, the processing then runs on your own device rather than uploading the content to a ToolsNova conversion server.</p>
+    <p>Local processing is not the same as being fully offline: the website must be loaded, and standard hosting requests still occur. Optional Google Analytics is loaded only if you accept the analytics choice. See the <a href="/privacy/">Privacy Policy</a> for details.</p>
+    <p>Performance and maximum file sizes depend on your device, browser and the individual tool. Some conversions, such as PDF compression, may change document properties or lose selectable text; those trade-offs are documented on the relevant tool page.</p></section>
+  <section class="tn-about-card" aria-labelledby="technology"><h2 id="technology">What technologies power the tools?</h2>
+    <p>ToolsNova is built primarily with semantic HTML, responsive CSS and JavaScript. Depending on the feature, the tools use browser APIs such as Web Crypto, Canvas and file handling, alongside locally hosted libraries including PDF.js, pdf-lib, JSZip and QR code utilities.</p>
+    <p>The website is published from a GitHub repository through GitHub Pages. The main website is <a href="https://toolsnova.online/">toolsnova.online</a>; testing or alternate deployment environments are not separate official products.</p></section>
+  <section class="tn-about-card" aria-labelledby="testing"><h2 id="testing">How are the tools checked?</h2>
+    <p>Development checks focus on representative inputs, the expected output, obvious invalid-input cases and usability on desktop and mobile. For example, a converter should be checked with supported and unsupported formats; a PDF operation should be checked with the resulting file; a text utility should be checked against a known example.</p>
+    <p>These are practical project checks, not a claim that every browser, device or edge case has been exhaustively tested. GitHub deployment checks confirm publication, but do not replace functional testing. If you find a bug or unexpected output, please report the steps and expected result.</p></section>
+  <section class="tn-about-card" aria-labelledby="privacy"><h2 id="privacy">Privacy and transparency</h2>
+    <p>ToolsNova does not require an account for its current tools. Supported input processing happens in the browser, and the site provides choices for optional analytics. Do not assume that any browser-based application can guarantee absolute confidentiality or security in every environment.</p>
+    <p>For more detail about hosting, files, analytics choices and third parties, read the <a href="/privacy/">Privacy Policy</a>.</p></section>
+  <section class="tn-about-card" aria-labelledby="contact"><h2 id="contact">Contact, feedback and issue reports</h2>
+    <p>For bug reports, reproducible issues, feature suggestions or questions about the project, open an issue in the <a href="https://github.com/toolnovahub/toolnovahub.github.io/issues" rel="noopener noreferrer">ToolsNova GitHub issue tracker</a>. Please do not include passwords, private documents or other sensitive information in a public issue.</p>
+    <p>To try a utility, <a href="/#tools">browse all 30 tools</a>, or read the <a href="/guides/">Guides &amp; Tutorials</a>.</p></section>
+</main>
+<footer class="tn-site-footer" aria-label="Site footer"><div class="tn-footer-brand"><strong class="tn-footer-title"><span class="tn-footer-badge" aria-hidden="true"><img src="/toolsnova-tools.svg" width="21" height="21" alt=""></span><span class="tn-footer-wordmark">Tools<span>Nova</span></span></strong><small>Simple tools. Thoughtfully made.</small></div><nav class="tn-footer-links" aria-label="Footer navigation"><a href="/#tools">All tools</a><a href="/guides/">Guides</a><a href="/about/" aria-current="page">About</a><a href="/privacy/">Privacy</a></nav><span class="tn-footer-copyright">© <span id="year">2026</span> ToolsNova</span></footer>
+<script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+<script src="/site-nav.js?v=4" defer></script>
+<script src="/analytics.js?v=1" defer></script>
+</body>
+</html>
